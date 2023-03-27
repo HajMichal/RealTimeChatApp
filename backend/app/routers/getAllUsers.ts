@@ -7,6 +7,7 @@ router.get('/allUsers', async (req, res) => {
     const { searchedValue } = req.query
 
     const usersList = await getAllUsers(searchedValue)
+    console.log(usersList)
     res.send(usersList).status(200)
     
 })
