@@ -1,10 +1,12 @@
 import express, { Request, Response} from "express";
 
-import register from './routers/register';
-import login from './routers/login';
-
 import http from 'http';
 import { Server } from "socket.io";
+
+import register from './routers/register';
+import login from './routers/login';
+import getUser from './routers/getUser'
+import getAllUsers  from "./routers/getAllUsers";
 
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -51,7 +53,7 @@ io.on('connection', (socket:any) => {
   console.log("User connected: " + socket.id);
 
 
-  socket.on("send_message", (data: string) => {
+  socket.on("send_message", (data: any) => {
     socket.broadcast.emit("reveice_message", data);
   })
 
@@ -60,8 +62,11 @@ io.on('connection', (socket:any) => {
   });
 });
 
+
 app.use("/", register);
 app.use("/", login)
+app.use("/", getUser)
+app.use("/", getAllUsers)
 
 
 server.listen(3000, () =>

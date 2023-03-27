@@ -4,6 +4,11 @@ const prisma = new PrismaClient()
 
 async function main() {
     const users = await prisma.user.findMany({
+      where: {
+        name:{
+          contains: "mich"          
+        }
+      },
     })
     console.log(users)
 }
