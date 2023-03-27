@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import io from "socket.io-client";
 
-import getData from "./api/getUserApi";
+import getCurrentUserData from "./api/getUserApi";
 
 import Chat from "./components/Chat";
 import Alert from "./components/Alert";
@@ -14,7 +14,7 @@ function App() {
 
   const navigate = useNavigate();
 
-  const { data, isError } = useQuery("user", getData, {
+  const { data, isError } = useQuery("user", getCurrentUserData, {
     retry: 2,
     retryDelay: 700,
   });

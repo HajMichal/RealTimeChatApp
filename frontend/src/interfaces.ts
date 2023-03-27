@@ -23,11 +23,15 @@ interface newUser {
     email: string,
     password: string
 }
-
+interface arrayOfUsers {
+    id: number,
+    name: string
+}
  export type {
     msgInput,
     chatTypes,
     messageData,
     user,
-    newUser
+    newUser,
+    arrayOfUsers
 }

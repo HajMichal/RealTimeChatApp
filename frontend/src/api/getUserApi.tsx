@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const loginApi = axios.create({
+const userApi = axios.create({
   baseURL: "http://localhost:3000",
   headers: {
     "Content-Type": "application/json"
@@ -19,9 +19,14 @@ interface getUser {
     exp: number
 }
 
-const getData = async (data: getUser | any) => {
-  return await loginApi.get("/user", { params: data});
+const getCurrentUserData = async (data: getUser | any) => {
+  return await userApi.get("/user", { params: data});
 };
 
-export default getData
+const getUsers = async () => {
+  return await userApi.get("/allUsers?searchedValue=", )
+}
+
+export default getCurrentUserData
+
 
