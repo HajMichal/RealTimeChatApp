@@ -21,8 +21,7 @@ interface getUser {
 
 
 
-export const getAllUsers = async (value:any) => {
-
+export const getAllUsers = async (value: string) => {
   return await userApi.get(`http://localhost:3000/allUsers?searchedValue=${value}` )
 }
 
