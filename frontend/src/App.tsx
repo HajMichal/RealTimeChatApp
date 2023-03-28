@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from "react";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
-
-import io from "socket.io-client";
 
 import getCurrentUserData from "./api/getUserApi";
 
 import Chat from "./components/Chat";
 import Alert from "./components/Alert";
 import LookForFriends from "./components/LookForFriends";
+
 function App() {
-
-
-  const navigate = useNavigate();
 
   const { data, isError } = useQuery("user", getCurrentUserData, {
     retry: 2,
@@ -52,10 +46,6 @@ function App() {
           </div>
         </div>
       </div>
-      {/* <div>
-    <button className="w-full"><Link to={"/register"} >Register</Link></button>
-    <button className="w-full"><Link to={"/login"}>Login</Link></button>
-  </div> */}
     </div>
   );
 }

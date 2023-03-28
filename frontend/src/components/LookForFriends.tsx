@@ -19,14 +19,8 @@ const LookForFriends = () => {
         queryKey: ["searchedValue", debounceSearchedTerm],
         queryFn: () => getAllUsers(watch("searchedValue")),
         enabled: debounceSearchedTerm !== undefined && debounceSearchedTerm.length >= 2, 
-        onSuccess: (data) => {
-            data.data.map((user: arrayOfUsers) =>{
-                console.log(user)
-            })
-        }
     }) 
 
-    isSuccess ? console.log(data?.data) : null
   return (
     <div className="flex flex-wrap justify-center">
       <form className="w-full mx-4 mb-3">
@@ -51,15 +45,15 @@ const LookForFriends = () => {
           </div>
         : null}
 
-        {isSuccess ? data?.data.map((user: arrayOfUsers) => 
-          <div className="card w-11/12 bg-dark shadow-xl ml-2 my-1 border border-brand">
-          <div className="card-body text-mid w-3/4 overflow-x-hidden">
-            <p className="">{user.name}</p>
-            <button className="absolute right-5"><FcPlus className="w-7 h-7 rounded-full" /></button>
+        {isSuccess ? data?.data.map((user: arrayOfUsers, key:number) => 
+          <div key={key} className="card w-11/12 bg-dark shadow-xl ml-2 my-1 border border-brand">
+            <div className="card-body text-mid w-3/4 overflow-x-hidden">
+              <p className="">{user.name}</p>
+              <button className="absolute right-5"><FcPlus className="w-7 h-7 rounded-full" /></button>
+            </div>
           </div>
-        </div>
         ) : null}
-        
+
       </div>
     </div>
   );
