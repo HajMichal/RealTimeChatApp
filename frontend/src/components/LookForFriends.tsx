@@ -47,8 +47,15 @@ const LookForFriends = () => {
 
         {isSuccess ? data?.data.map((user: arrayOfUsers, key:number) => 
           <div key={key} className="card w-11/12 bg-dark shadow-xl ml-2 my-1 border border-brand">
-            <div className="card-body text-mid w-3/4 overflow-x-hidden">
-              <p className="">{user.name}</p>
+            <div className="card-body text-mid w-3/4 overflow-x-hidden ">
+              <div className="flex items-center gap-3">
+                <div className="avatar -my-4">
+                  <div className="w-12 rounded-full">
+                    <img src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png" />
+                  </div>
+                </div>
+                {user.name}
+                </div>
               <button className="absolute right-5"><FcPlus className="w-7 h-7 rounded-full" /></button>
             </div>
           </div>

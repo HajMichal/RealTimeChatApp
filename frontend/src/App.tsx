@@ -5,6 +5,7 @@ import getCurrentUserData from "./api/getUserApi";
 import Chat from "./components/Chat";
 import Alert from "./components/Alert";
 import LookForFriends from "./components/LookForFriends";
+import FriendsList from "./components/FriendsList";
 
 function App() {
 
@@ -36,7 +37,8 @@ function App() {
 
                 <LookForFriends />
 
-              <div id="listOfFriends"></div>
+                <FriendsList />
+                
             </div>
           </div>
 
