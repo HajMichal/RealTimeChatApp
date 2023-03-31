@@ -37,6 +37,9 @@ interface friend {
     userId: number
     friendsName: string
 }
+interface friendProps {
+    friends: friend[]
+  }
 
  export type {
     msgInput,
@@ -46,5 +49,6 @@ interface friend {
     newUser,
     searchedUser,
     userId,
-    friend
+    friend,
+    friendProps
 }
