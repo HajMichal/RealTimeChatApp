@@ -12,18 +12,27 @@ datasource db {
 }
 
 model User {
-  id      Int     @id @default(autoincrement())
-  name    String
-  email   String  @unique
-  password String 
-  role    String  @default("USER")
-  messages Chats[]
+  id              Int       @id @default(autoincrement())
+  name            String
+  email           String    @unique
+  password        String 
+  role            String    @default("USER")
+  messages        Chats[]
+  friends         Friend[]
 }
 
 model Chats {
-  id      Int @id @default(autoincrement())
-  message String
-  timestamp DateTime
-  author  User @relation(fields: [userId], references: [id])
-  userId Int
+  id              Int       @id @default(autoincrement())
+  message         String
+  timestamp       DateTime
+  author          User      @relation(fields: [userId], references: [id])
+  userId          Int
+}
+
+model Friend {
+  id            Int         @id @default(autoincrement())
+  friendsId     Int         
+  friendsName   String
+  user          User        @relation(fields: [userId], references: [id])
+  userId        Int
 }

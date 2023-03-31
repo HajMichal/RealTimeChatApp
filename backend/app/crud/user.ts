@@ -31,7 +31,8 @@ async function getAllUsers(searchedValue?: any) {
     const users = await prisma.user.findMany({
         select: {
             id: true,
-            name: true
+            name: true,
+            email: true,
         },
         where: {
           name:{
