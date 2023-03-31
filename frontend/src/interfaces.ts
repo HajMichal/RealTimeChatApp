@@ -4,6 +4,7 @@ interface msgInput {
 };
 
 interface chatTypes {
+    _id: number
     username: string;
 }
 
@@ -23,15 +24,27 @@ interface newUser {
     email: string,
     password: string
 }
-interface arrayOfUsers {
+interface searchedUser {
     id: number,
     name: string
 }
+interface userId {
+    mainUserId: number
+  }
+interface friend {
+    id: number
+    friendsId: number
+    userId: number
+    friendsName: string
+}
+
  export type {
     msgInput,
     chatTypes,
     messageData,
     user,
     newUser,
-    arrayOfUsers
+    searchedUser,
+    userId,
+    friend
 }

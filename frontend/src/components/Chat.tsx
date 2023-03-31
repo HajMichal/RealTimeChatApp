@@ -1,29 +1,44 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { io, Socket } from "socket.io-client";
+
+import Drawer from "./Drawer";
 import { msgInput, chatTypes, messageData } from "../interfaces";
-import io from "socket.io-client";
 
 import { TbSend } from "react-icons/tb";
 
-import Drawer from "./Drawer";
-
-const Chat = ({ username }: chatTypes) => {
+const Chat = ({ username, _id }: chatTypes) => {
   const [messageList, setMessageList] = useState<messageData[]>([]);
-  const [isDrawerOpen, setIsDrawer] = useState(false)
-    ///@ts-ignore
-  // const socket: Socket = io.connect("http://localhost:3000");
-  const socket = useRef(io("http://localhost:3000"))
-
+  const socket = useRef<Socket>();
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors },
+    reset
   } = useForm<msgInput>();
-
   
+  useEffect(() => {
+    socket.current = io("http://localhost:3000")
+  }, [])
+  
+  useEffect(() => {
+    if (!socket.current) return
+    socket.current.emit("addUser", _id)
+    socket.current.on("getUsers", (users: any) => {
+      console.log(users)
+    })
+  }, [username, _id])
+
+  useEffect(() => {
+    if (!socket.current) return
+    socket.current.on("reveice_message", (data: messageData) => {
+      console.log(data);
+      setMessageList((rest_list) => [...rest_list, data]);
+
+    });
+  }, [socket]);
+
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
-    if (data.message !== "") {
+    if (data.message !== "" && socket.current) {
 
       const messageData = {
         message: data.message,
@@ -34,19 +49,34 @@ const Chat = ({ username }: chatTypes) => {
           new Date(Date.now()).getMinutes()
       };
 
-      await socket.current.emit("send_message", messageData);
+      socket.current.emit("send_message", messageData);
       setMessageList((rest_list) => [...rest_list, messageData]);
       reset();
     }
   };
 
-  useEffect(() => {
-    socket.current.on("reveice_message", (data: messageData) => {
-      console.log(data);
-      setMessageList((rest_list) => [...rest_list, data]);
+  // ZNALEZC RECIVER ID -> To jest ID uzytkowanika do ktorego wlasnie piszmey (znajdziesz go w './FriendsList.tsx')
+  // po kliknieciu w zielony dymek konwersacji przesle dane tego uzytkownika w ktorym powinno tez byc ID (SPRAWDZ jako pierwsze)
+  const sendMessage2: SubmitHandler<msgInput> = async (data) => {
+    if (data.message !== "" && socket.current) {
 
-    });
-  }, [socket]);
+      const messageData = {
+        message: data.message,
+        author: username,
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes()
+      };
+
+      socket.current.emit("sendMessage", {
+        senderId: _id
+        // reciverId: 
+      });
+      setMessageList((rest_list) => [...rest_list, messageData]);
+      reset();
+    }
+  };
 
   return (
     <>

@@ -35,16 +35,16 @@ function App() {
             </h2>
             <div className="w-full mt-5">
 
-                <LookForFriends />
+                <LookForFriends mainUserId={data?.data.id} />
 
-                <FriendsList />
-                
+                <FriendsList mainUserId={data?.data.id}  />
+
             </div>
           </div>
 
           <div className="bg-dark row-start-1 row-span-5 p-5 tablet:col-start-2 col-span-3 tablet:col-span-2 grid grid-rows-6  border-2 border-l  border-brand rounded-xl">
    
-            <Chat username={data?.data.name} />
+            <Chat username={data?.data.name} _id={data?.data.id}  />
           </div>
         </div>
       </div>
