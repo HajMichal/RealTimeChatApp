@@ -4,17 +4,13 @@ const prisma = new PrismaClient()
 
 async function main() {
 
-  const getUser = await prisma.user.findUnique({
-    //        userId
-    where: { id: 4 },
-    include: {friends: true}
-  })
+  const getUser = await prisma.friend.findMany({})
 
   
   // const existingFriend = getUser?.friends.find((friend)=>  friend.friendsId === 3 ? friend : null )
   // console.log(!!existingFriend)
 
-  console.log(getUser?.friends)
+  console.log(getUser)
 
   // if (existingFriend) throw new Error("This Friend already exists in your friend list")
 

@@ -9,6 +9,7 @@ import getUser from './routers/getUser'
 import getAllUsers  from "./routers/getAllUsers";
 import addNewFriend from './routers/addNewFriend'
 import getFriendsList from './routers/getFriendsList'
+import removeFriend from "./routers/removeFriends";
 
 import { sendMsg, users } from './interfaces'
 
@@ -99,6 +100,7 @@ app.use("/", getUser)
 app.use("/", getAllUsers)
 app.use("/", addNewFriend)
 app.use("/", getFriendsList)
+app.use("/", removeFriend)
 
 server.listen(3000, () =>
   console.log(`

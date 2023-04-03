@@ -38,7 +38,20 @@ async function getFriends(userId: number ){
   return getUser?.friends
 }
 
+async function removeFriend( id: number ){
+  const friend = await prisma.friend.findUnique({
+    where: { id: id },
+    select: { userId: true }
+  })
+  if(!friend) throw new Error("Friend not found")
+  const removedFriend = await prisma.friend.delete({
+    where: { id: id }
+  })
+  return removedFriend
+}
+
 export {
     addFriend,
-    getFriends
+    getFriends,
+    removeFriend
 }
