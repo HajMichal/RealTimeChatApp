@@ -31,6 +31,7 @@ interface searchedUser {
 interface userId {
     mainUserId: number
   }
+  
 interface friend {
     id: number
     friendsId: number
@@ -38,7 +39,10 @@ interface friend {
     friendsName: string
 }
 interface friendProps {
-    friends: friend[]
+    friends: any
+  }
+  interface FriendViewProps {
+    data: friend;
   }
 
  export type {
@@ -50,5 +54,6 @@ interface friendProps {
     searchedUser,
     userId,
     friend,
-    friendProps
+    friendProps,
+    FriendViewProps
 }

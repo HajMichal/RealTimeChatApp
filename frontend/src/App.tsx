@@ -37,7 +37,9 @@ function App() {
 
                 <LookForFriends mainUserId={data?.data.id} />
 
-                <FriendsList mainUserId={data?.data.id}  />
+                <FriendsList 
+                // mainUserId={data?.data.id}  
+                />
 
             </div>
           </div>

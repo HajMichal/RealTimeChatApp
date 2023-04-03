@@ -4,9 +4,9 @@ import { useQuery } from "react-query";
 import { getFriendList } from "../api/getFriendList";
 import { userId, friend } from "../interfaces";
 
-import Test from "./Freinds";
+import Friends from "./Freinds";
 
-const FriendsList = (currentUserId: userId) => {
+const FriendsList = ( ) => {
 
     const [currentChat, setCurrentChat] = useState()
     const [friendList, setFriendList] = useState<friend[]>([])
@@ -27,7 +27,7 @@ const FriendsList = (currentUserId: userId) => {
 
   return (
     <div className="w-full max-h-96 overflow-y-scroll mt-10">
-        <Test friends={friendList} />
+        <Friends friends={friendList} />
     </div>
   );
 };
