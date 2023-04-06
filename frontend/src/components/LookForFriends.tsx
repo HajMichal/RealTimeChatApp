@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 import getAllUsers from "../api/getAllUsers";
 import addFriend from "../api/addFriend";
@@ -25,9 +25,12 @@ const LookForFriends = (mainUserId: userId) => {
         enabled: debounceSearchedTerm !== undefined && debounceSearchedTerm.length >= 2,
 
     }) 
-
-  
-    const { mutate, isError, error } = useMutation( addFriend )
+    const queryClient = useQueryClient()
+    const { mutate, isError, error } = useMutation( addFriend,  {
+      onSuccess: () => {
+        queryClient.invalidateQueries("friendList")
+      },
+    } )
 
 
     // @ts-ignore

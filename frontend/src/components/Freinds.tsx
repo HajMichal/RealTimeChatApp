@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useMutation } from "react-query";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { friend, friendProps, FriendViewProps } from "../interfaces";
 import remover from "../api/removeFriend";
 
@@ -7,30 +7,37 @@ import { BsThreeDotsVertical, BsFillChatDotsFill } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 
 
-
 function Friends({ friends }: friendProps) {
-  return friends.map((friend: friend) => <FriendView key={friend.id} data={friend} />)
+  return friends.map((friend: friend) => <FriendView key={friend.id} data={friend}  />)
 }
 
 
-const FriendView: React.FC<FriendViewProps> = (props) => {
-  const [viewOptions, setViewOptions] = useState<boolean>(false); 
-  const {mutate} = useMutation(remover, {
-    onSuccess: () =>{
-      console.log("giit")
-    }
-  })
+const FriendView: React.FC<FriendViewProps> = (props,  {} ) => {
+  const [viewOptions, setViewOptions] = useState<boolean>(false);
+  
+  const queryClient = useQueryClient()
+  const {mutate} = useMutation(remover,  {
+    onSuccess: () => {
+      queryClient.invalidateQueries("friendList")
+    },
+  } )
 
+
+  
+  const startChat = () => {
+      localStorage.setItem("reciverId", JSON.stringify(props.data.friendsId))
+  }
+  
+  useEffect(() => {
+    window.addEventListener('reciverId', startChat)
+    return () => {
+      window.removeEventListener('reciverId', startChat)
+    }
+  }, [])
+  
   const removeFromFriends = () => {
     mutate(props.data.id)
   }
-
-  const startChat = () => {
-    console.log(props.data)
-  }
-
-
-
 
   return (
     <div className="card-body my-3 p-1 text-mid w-full" key={props.data.id}>

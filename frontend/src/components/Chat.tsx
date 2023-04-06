@@ -7,8 +7,16 @@ import { msgInput, chatTypes, messageData } from "../interfaces";
 
 import { TbSend } from "react-icons/tb";
 
+
+
 const Chat = ({ username, _id }: chatTypes) => {
   const [messageList, setMessageList] = useState<messageData[]>([]);
+
+  const [message, setMessage] = useState<any>([])
+  
+  const [currentReciverId, setCurrentReciverId] = useState<number>()
+  const [arrivalMessage, setArrivalMessage] = useState<object>()
+
   const socket = useRef<Socket>();
   const {
     register,
@@ -18,8 +26,24 @@ const Chat = ({ username, _id }: chatTypes) => {
   
   useEffect(() => {
     socket.current = io("http://localhost:3000")
+    socket.current.on("getMessage", data => {
+      setArrivalMessage({
+        senderId: _id,
+        text: data.message,
+        createdAt:
+            new Date(Date.now()).getHours() +
+            ":" +
+            new Date(Date.now()).getMinutes()
+      })
+    })
   }, [])
+
+  useEffect(() => {
+    arrivalMessage && currentReciverId && 
+    setMessage((prev: string) => [...prev, arrivalMessage])
+  }, [arrivalMessage])
   
+  // zrobic zeby po stronie serwera dodawalo do listy users w linijce 47
   useEffect(() => {
     if (!socket.current) return
     socket.current.emit("addUser", _id)
@@ -28,6 +52,7 @@ const Chat = ({ username, _id }: chatTypes) => {
     })
   }, [username, _id])
 
+  // Setting messages into message list
   useEffect(() => {
     if (!socket.current) return
     socket.current.on("reveice_message", (data: messageData) => {
@@ -36,6 +61,16 @@ const Chat = ({ username, _id }: chatTypes) => {
 
     });
   }, [socket]);
+
+  // Getting the id of the user we want to write with
+  useEffect(() => {
+    const reciverId = localStorage.getItem('reciverId')
+    if(reciverId) {
+      setCurrentReciverId(JSON.parse(reciverId))
+      console.log(reciverId)
+    }
+  }, [localStorage.getItem('reciverId')])
+
 
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
     if (data.message !== "" && socket.current) {
@@ -57,26 +92,38 @@ const Chat = ({ username, _id }: chatTypes) => {
 
   // ZNALEZC RECIVER ID -> To jest ID uzytkowanika do ktorego wlasnie piszmey (znajdziesz go w './FriendsList.tsx')
   // po kliknieciu w zielony dymek konwersacji przesle dane tego uzytkownika w ktorym powinno tez byc ID (SPRAWDZ jako pierwsze)
-  const sendMessage2: SubmitHandler<msgInput> = async (data) => {
-    if (data.message !== "" && socket.current) {
+  // 1h41m30sek -lamaDev
+  // const sendMessage: SubmitHandler<msgInput> = async (data) => {
+  //   if (data.message !== "" && socket.current) {
 
-      const messageData = {
-        message: data.message,
-        author: username,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes()
-      };
+  //     const messageData = {
+  //       message: data.message,
+  //       author: username,
+  //       time:
+  //         new Date(Date.now()).getHours() +
+  //         ":" +
+  //         new Date(Date.now()).getMinutes()
+  //     };
+      
+  //     socket.current.emit("sendMessage", {
+  //       senderId: _id,
+  //       reciverId: currentReciverId,
+  //       text: messageData
+  //     });
+  //     setMessageList((rest_list) => [...rest_list, messageData]);
+  //     reset();
+  //   }
+  // };
 
-      socket.current.emit("sendMessage", {
-        senderId: _id
-        // reciverId: 
-      });
-      setMessageList((rest_list) => [...rest_list, messageData]);
-      reset();
-    }
-  };
+  useEffect(() => {
+    if(!socket.current) return
+    
+    socket.current.on("getMessage", data =>{
+      
+    })
+
+    
+  })
 
   return (
     <>
