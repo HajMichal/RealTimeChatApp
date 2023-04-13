@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { friend, friendProps, FriendViewProps } from "../interfaces";
 import remover from "../api/removeFriend";
@@ -25,7 +25,7 @@ const FriendView: React.FC<FriendViewProps> = (props) => {
     },
   } )
 
-  const handleReceiverId = useContext(ReceiverIdContext)
+  const { handleReceiverId } = useContext(ReceiverIdContext)
   
   const startChat = () => {
     handleReceiverId(props.data.friendsId);

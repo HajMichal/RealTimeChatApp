@@ -37,7 +37,6 @@ const Chat = ({ username, _id, receiverId }: chatTypes) => {
     },
   })
 
-  // console.log(data?.data)
   
   useEffect(() => {
     socket.current = io("http://localhost:3000")

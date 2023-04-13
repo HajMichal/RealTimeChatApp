@@ -8,8 +8,11 @@ import Alert from "./components/Alert";
 import LookForFriends from "./components/LookForFriends";
 import FriendsList from "./components/FriendsList";
 
-
-export const ReceiverIdContext = React.createContext<any>(null)
+type ReceiverIdContextValue = {
+  handleReceiverId: (receiverId: number) => void;
+};
+export const ReceiverIdContext = React.createContext<ReceiverIdContextValue>({  handleReceiverId: () => {},
+})
 
 function App() {
   const [receiverId, setReceiverId] = useState<number | null>(null)
@@ -48,7 +51,7 @@ function App() {
 
                 <LookForFriends mainUserId={data?.data.id} />
 
-                <ReceiverIdContext.Provider value={handleReceiverId} >
+                <ReceiverIdContext.Provider value={{handleReceiverId}} >
                   <FriendsList />
                 </ReceiverIdContext.Provider> 
 
