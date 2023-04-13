@@ -10,6 +10,8 @@ import getAllUsers  from "./routers/getAllUsers";
 import addNewFriend from './routers/addNewFriend'
 import getFriendsList from './routers/getFriendsList'
 import removeFriend from "./routers/removeFriends";
+import postMessage from "./routers/postMessage"
+import loadMessage from "./routers/getMessages"
 
 import { sendMsg, users } from './interfaces'
 
@@ -44,6 +46,7 @@ app.use(
   });
 
 
+
 let users: Array<users | any> = [];
 
 const addUser = (userId: number, socketId: number) => {
@@ -52,38 +55,34 @@ const addUser = (userId: number, socketId: number) => {
   users.push({ userId, socketId });
 };
 
+
 const removeUser = (socketId: number) => {
   users = users.filter((user) => user.socketId !== socketId);
 };
 
-const getUserSocket = (userId: number) => {
-  return users.find((user) => user.userId === userId);
+const getUserSocket = (receiverId: number) => {
+  return users.find((user) => user.userId === receiverId);
 };
 
-  const io = new Server(server, {
-    cors: {
-      origin: ["http://localhost:5173", "http://localhost:5173/"],
-      methods: "GET, POST",
-    }
-  });
+const io = new Server(server, {
+  cors: {
+    origin: ["http://localhost:5173", "http://localhost:5173/"],
+    methods: "GET, POST",
+  }
+});
 
-  io.on('connection', (socket:any) => {
-    console.log("User connected: " + socket.id);
-  
-  
-    // socket.on("send_message", (data: any) => {
-    //   socket.broadcast.emit("reveice_message", data);
-    // })
-    socket.on("addUser", (userId: number) => {
-      addUser(userId, socket.id)
-      io.emit("getUsers", users)
+io.on('connection', (socket:any) => {
+  console.log("User connected: " + socket.id);
+  socket.on("addUser", (userId: number) => {
+    addUser(userId, socket.id)
+    io.emit("getUsers", users)
     })
    
-    socket.on("sendMessage", ({senderId, reciverId, data}: sendMsg) =>{
-      const user = getUserSocket(reciverId)
-      io.to(user.socketId).emit("getMessage", {
-        senderId,
-        data
+    socket.on("sendMessage", ({ receiverId, messageData, senderId}: sendMsg) =>{
+      const user = getUserSocket(receiverId)
+      io.to(user?.socketId).emit("getMessage", {
+        messageData,
+        from: senderId
       })
     })
   
@@ -101,6 +100,8 @@ app.use("/", getAllUsers)
 app.use("/", addNewFriend)
 app.use("/", getFriendsList)
 app.use("/", removeFriend)
+app.use("/", postMessage)
+app.use("/", loadMessage)
 
 server.listen(3000, () =>
   console.log(`

@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 async function main() {
 
-  const getUser = await prisma.friend.findMany({})
+  const getUser = await prisma.chats.findMany({})
 
   
   // const existingFriend = getUser?.friends.find((friend)=>  friend.friendsId === 3 ? friend : null )

@@ -6,8 +6,8 @@ interface userInterface {
 
 interface sendMsg {
   senderId: number
-  reciverId: number
-  data: object
+  receiverId: number
+  messageData: object
 }
 
 interface users {

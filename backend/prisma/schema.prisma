@@ -25,6 +25,7 @@ model Chats {
   id              Int       @id @default(autoincrement())
   message         String
   timestamp       DateTime
+  reciverId       Int
   author          User      @relation(fields: [userId], references: [id])
   userId          Int
 }
