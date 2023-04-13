@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { friend, friendProps, FriendViewProps } from "../interfaces";
 import remover from "../api/removeFriend";
+import { ReceiverIdContext } from "../App";
 
 import { BsThreeDotsVertical, BsFillChatDotsFill } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 
 
 function Friends({ friends }: friendProps) {
-  return friends.map((friend: friend) => <FriendView key={friend.id} data={friend}  />)
+  return friends.map((friend: friend) => <FriendView key={friend.id} data={friend} />)
 }
 
 
-const FriendView: React.FC<FriendViewProps> = (props,  {} ) => {
+const FriendView: React.FC<FriendViewProps> = (props) => {
+
   const [viewOptions, setViewOptions] = useState<boolean>(false);
   
+  // W tym miejscu queryClient pomaga w szybszym usunieciu z ekranu danego uzytkownika. Usuwa go odrazu 
   const queryClient = useQueryClient()
   const {mutate} = useMutation(remover,  {
     onSuccess: () => {
@@ -22,18 +25,12 @@ const FriendView: React.FC<FriendViewProps> = (props,  {} ) => {
     },
   } )
 
-
+  const handleReceiverId = useContext(ReceiverIdContext)
   
   const startChat = () => {
-      localStorage.setItem("reciverId", JSON.stringify(props.data.friendsId))
-  }
+    handleReceiverId(props.data.friendsId);
+  };
   
-  useEffect(() => {
-    window.addEventListener('reciverId', startChat)
-    return () => {
-      window.removeEventListener('reciverId', startChat)
-    }
-  }, [])
   
   const removeFromFriends = () => {
     mutate(props.data.id)
@@ -47,9 +44,10 @@ const FriendView: React.FC<FriendViewProps> = (props,  {} ) => {
             <img src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png" />
           </div>
         </div>
-        <p className="col-start-3 col-end-7 overflow-x-hidden">
-          {props.data.friendsName}
-        </p>
+
+          <button className="col-start-3 col-end-7 overflow-x-hidden hover:cursor-pointer" onClick={startChat} >
+            {props.data.friendsName}
+          </button>
 
         <button
           className="col-start-7 col-end-8"
@@ -62,13 +60,6 @@ const FriendView: React.FC<FriendViewProps> = (props,  {} ) => {
             viewOptions ? "flex flex-wrap" : "hidden"
           }`}
         >
-          <button
-            onClick={startChat}
-            className="text-green-400 w-full items-center flex "
-          >
-            {" "}
-            <BsFillChatDotsFill />
-          </button>
           <label
             onClick={removeFromFriends}
             className="text-red-600 w-full  items-center flex hover:cursor-pointer"

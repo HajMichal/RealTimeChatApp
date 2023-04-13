@@ -1,54 +1,53 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useEffect, useState, useRef } from "react";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { io, Socket } from "socket.io-client";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+import { TbSend } from "react-icons/tb";
+import { BsFillChatDotsFill } from "react-icons/bs";
+
 
 import Drawer from "./Drawer";
 import { msgInput, chatTypes, messageData } from "../interfaces";
 
-import { TbSend } from "react-icons/tb";
+import { loadMessage } from "../api/getMessages"
+import { saveMessage } from "../api/saveMessage"
 
-
-
-const Chat = ({ username, _id }: chatTypes) => {
-  const [messageList, setMessageList] = useState<messageData[]>([]);
-
-  const [message, setMessage] = useState<any>([])
-  
-  const [currentReciverId, setCurrentReciverId] = useState<number>()
-  const [arrivalMessage, setArrivalMessage] = useState<object>()
+const Chat = ({ username, _id, receiverId }: chatTypes) => {
 
   const socket = useRef<Socket>();
+  const [messageList, setMessageList] = useState<messageData[]>([]);
+
   const {
     register,
     handleSubmit,
     reset
   } = useForm<msgInput>();
+
+  const { data, isSuccess, isLoading } = useQuery({
+    queryKey: ["receiverId", receiverId],
+    queryFn: () => loadMessage(receiverId),
+    enabled: receiverId !== undefined 
+  })
+
+  const queryClient = useQueryClient()
+  const { mutate, isError, error } = useMutation( saveMessage, {
+    onSuccess() {
+      queryClient.invalidateQueries("receiverId")
+    },
+  })
+
+  // console.log(data?.data)
   
   useEffect(() => {
     socket.current = io("http://localhost:3000")
-    socket.current.on("getMessage", data => {
-      setArrivalMessage({
-        senderId: _id,
-        text: data.message,
-        createdAt:
-            new Date(Date.now()).getHours() +
-            ":" +
-            new Date(Date.now()).getMinutes()
-      })
-    })
   }, [])
 
-  useEffect(() => {
-    arrivalMessage && currentReciverId && 
-    setMessage((prev: string) => [...prev, arrivalMessage])
-  }, [arrivalMessage])
-  
-  // zrobic zeby po stronie serwera dodawalo do listy users w linijce 47
   useEffect(() => {
     if (!socket.current) return
     socket.current.emit("addUser", _id)
     socket.current.on("getUsers", (users: any) => {
-      console.log(users)
+      // console.log(users)
     })
   }, [username, _id])
 
@@ -56,20 +55,19 @@ const Chat = ({ username, _id }: chatTypes) => {
   useEffect(() => {
     if (!socket.current) return
     socket.current.on("reveice_message", (data: messageData) => {
-      console.log(data);
       setMessageList((rest_list) => [...rest_list, data]);
 
     });
   }, [socket]);
 
-  // Getting the id of the user we want to write with
+
   useEffect(() => {
-    const reciverId = localStorage.getItem('reciverId')
-    if(reciverId) {
-      setCurrentReciverId(JSON.parse(reciverId))
-      console.log(reciverId)
-    }
-  }, [localStorage.getItem('reciverId')])
+  if (!socket.current) return 
+  socket.current.on("getMessage", ({ messageData, from }: any) =>  {
+
+    setMessageList((rest_list) => [...rest_list, messageData]);
+    })
+  }, [])
 
 
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
@@ -77,57 +75,28 @@ const Chat = ({ username, _id }: chatTypes) => {
 
       const messageData = {
         message: data.message,
-        author: username,
-        time:
+        receiverId: receiverId,
+        userId: _id,
+        timestamp:
           new Date(Date.now()).getHours() +
           ":" +
           new Date(Date.now()).getMinutes()
       };
-
-      socket.current.emit("send_message", messageData);
-      setMessageList((rest_list) => [...rest_list, messageData]);
-      reset();
+      mutate(messageData)
+      socket.current.emit("sendMessage", {
+        receiverId: receiverId,
+        messageData,
+        senderId: _id
+      })
+      // setMessageList((rest_list) => [...rest_list, messageData]);
     }
+    reset();
   };
 
-  // ZNALEZC RECIVER ID -> To jest ID uzytkowanika do ktorego wlasnie piszmey (znajdziesz go w './FriendsList.tsx')
-  // po kliknieciu w zielony dymek konwersacji przesle dane tego uzytkownika w ktorym powinno tez byc ID (SPRAWDZ jako pierwsze)
-  // 1h41m30sek -lamaDev
-  // const sendMessage: SubmitHandler<msgInput> = async (data) => {
-  //   if (data.message !== "" && socket.current) {
-
-  //     const messageData = {
-  //       message: data.message,
-  //       author: username,
-  //       time:
-  //         new Date(Date.now()).getHours() +
-  //         ":" +
-  //         new Date(Date.now()).getMinutes()
-  //     };
-      
-  //     socket.current.emit("sendMessage", {
-  //       senderId: _id,
-  //       reciverId: currentReciverId,
-  //       text: messageData
-  //     });
-  //     setMessageList((rest_list) => [...rest_list, messageData]);
-  //     reset();
-  //   }
-  // };
-
-  useEffect(() => {
-    if(!socket.current) return
-    
-    socket.current.on("getMessage", data =>{
-      
-    })
-
-    
-  })
 
   return (
     <>
-      <div className="row-start-1 row-span-5 overflow-y-scroll scrollbar-hide scroll-smooth scroll">
+      <div className="row-start-1 row-span-5 overflow-y-scroll overflow-x-hidden scrollbar-hide scroll-smooth scroll">
         <div className="flex tablet:hidden">
                  
           <Drawer />
@@ -138,7 +107,12 @@ const Chat = ({ username, _id }: chatTypes) => {
         </div>
         <div className="w-full h-full " id="text-area">
           <ul>
-            {messageList.map((messageContent, index) => (
+            { receiverId === null ? 
+            <div className="flex chat m-5 tablet:mx-16 text-6xl tablet:text-9xl text-opacity-20 text-mid justify-center">
+              <p>Open new chat <BsFillChatDotsFill /></p>
+            </div>
+            :
+            messageList.map((messageContent, index) => (
               <div className={username === messageContent.author ?  "chat chat-end my-3 " : "chat chat-start my-3"} key={index}>
                 <div className="chat-image avatar">
                   {/* <div className="w-10 rounded-full">

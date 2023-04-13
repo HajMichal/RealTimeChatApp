@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 
 import getCurrentUserData from "./api/getUserApi";
@@ -7,12 +8,20 @@ import Alert from "./components/Alert";
 import LookForFriends from "./components/LookForFriends";
 import FriendsList from "./components/FriendsList";
 
+
+export const ReceiverIdContext = React.createContext<any>(null)
+
 function App() {
+  const [receiverId, setReceiverId] = useState<number | null>(null)
 
   const { data, isError } = useQuery("user", getCurrentUserData, {
     retry: 2,
     retryDelay: 700,
   });
+  
+  const handleReceiverId = (receiverId: number) => {
+    setReceiverId(receiverId)
+  }
 
   return (
     <div className="flex w-full h-screen justify-center pb-14 pt-5 bg-dark">
@@ -33,20 +42,22 @@ function App() {
             <h2 className="w-full mt-5 text-center text-2xl">
               Hey {data?.data.name}
             </h2>
+
+
             <div className="w-full mt-5">
 
                 <LookForFriends mainUserId={data?.data.id} />
 
-                <FriendsList 
-                // mainUserId={data?.data.id}  
-                />
+                <ReceiverIdContext.Provider value={handleReceiverId} >
+                  <FriendsList />
+                </ReceiverIdContext.Provider> 
 
             </div>
           </div>
 
           <div className="bg-dark row-start-1 row-span-5 p-5 tablet:col-start-2 col-span-3 tablet:col-span-2 grid grid-rows-6  border-2 border-l  border-brand rounded-xl">
    
-            <Chat username={data?.data.name} _id={data?.data.id}  />
+            <Chat username={data?.data.name} _id={data?.data.id} receiverId={receiverId} />
           </div>
         </div>
       </div>

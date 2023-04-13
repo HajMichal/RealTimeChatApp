@@ -1,12 +1,8 @@
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-
+import { useDebounce } from "../hooks/useDebounce";
 import getAllUsers from "../api/getAllUsers";
 import addFriend from "../api/addFriend";
-
-import { useDebounce } from "../hooks/useDebounce";
-
+import { useForm } from "react-hook-form";
 import { searchedUser, userId } from "../interfaces";
 
 import { BiSearchAlt } from "react-icons/bi";
@@ -23,19 +19,14 @@ const LookForFriends = (mainUserId: userId) => {
         queryKey: ["searchedValue", debounceSearchedTerm],
         queryFn: () => getAllUsers(watch("searchedValue")),
         enabled: debounceSearchedTerm !== undefined && debounceSearchedTerm.length >= 2,
-
     }) 
+
     const queryClient = useQueryClient()
     const { mutate, isError, error } = useMutation( addFriend,  {
       onSuccess: () => {
         queryClient.invalidateQueries("friendList")
       },
     } )
-
-
-    // @ts-ignore
-    if(error) console.log(error.response.data.message)
-          
 
     const handleAddFriend = (clickedFriend: searchedUser,  mainUserId: userId) => {
       const newFriendData = {
@@ -45,6 +36,9 @@ const LookForFriends = (mainUserId: userId) => {
       }
       mutate(newFriendData)
     }
+    
+    // @ts-ignore
+    if(error) console.log(error.response.data.message)
 
   return (
     <div className="flex flex-wrap justify-center">

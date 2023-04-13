@@ -6,12 +6,19 @@ interface msgInput {
 interface chatTypes {
     _id: number
     username: string;
+    receiverId: number | null
 }
 
 interface messageData {
     author: string;
     time: string;
     message: string;
+}
+interface sendMessage {
+    message: string,
+    timestamp: string,
+    userId: number,
+    receiverId: number | null
 }
 
 interface user {
@@ -55,5 +62,6 @@ interface friendProps {
     userId,
     friend,
     friendProps,
-    FriendViewProps
+    FriendViewProps,
+    sendMessage
 }
