@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
 import getCurrentUserData from "./api/getUserApi";
@@ -7,25 +7,38 @@ import Chat from "./components/Chat";
 import Alert from "./components/Alert";
 import LookForFriends from "./components/LookForFriends";
 import FriendsList from "./components/FriendsList";
+import { friend } from "./interfaces";
 
-type ReceiverIdContextValue = {
+type ContextType = {
   handleReceiverId: (receiverId: number) => void;
+  handleAllFriends: (friendsList: friend[]) => void;
 };
-export const ReceiverIdContext = React.createContext<ReceiverIdContextValue>({  handleReceiverId: () => {},
+export const MyContext = React.createContext<ContextType>({  
+  handleReceiverId: () => {}, 
+  handleAllFriends: () => {},
 })
 
 function App() {
   const [receiverId, setReceiverId] = useState<number | null>(null)
+  const [friendsList, setFriendsList] = useState<friend[]>()
+  const [currentChatFriend, setCurrentChatFriend] = useState<friend>()
 
   const { data, isError } = useQuery("user", getCurrentUserData, {
     retry: 2,
     retryDelay: 700,
   });
-  
+
   const handleReceiverId = (receiverId: number) => {
     setReceiverId(receiverId)
   }
 
+  const handleAllFriends = (friendsList: friend[]) => {
+    setFriendsList(friendsList)
+  }
+  useEffect(() => {
+    friendsList?.forEach((friend) => friend.friendsId === receiverId ? setCurrentChatFriend(friend) : null )
+  }, [friendsList, receiverId])
+  console.log(currentChatFriend)
   return (
     <div className="flex w-full h-screen justify-center pb-14 pt-5 bg-dark">
       {isError ? <Alert /> : null}
@@ -51,16 +64,16 @@ function App() {
 
                 <LookForFriends mainUserId={data?.data.id} />
 
-                <ReceiverIdContext.Provider value={{handleReceiverId}} >
+                <MyContext.Provider value={{handleReceiverId, handleAllFriends}} >
                   <FriendsList />
-                </ReceiverIdContext.Provider> 
+                </MyContext.Provider> 
 
             </div>
           </div>
 
           <div className="bg-dark row-start-1 row-span-5 p-5 tablet:col-start-2 col-span-3 tablet:col-span-2 grid grid-rows-6  border-2 border-l  border-brand rounded-xl">
    
-            <Chat username={data?.data.name} _id={data?.data.id} receiverId={receiverId} />
+            <Chat username={data?.data.name} _id={data?.data.id} receiverId={receiverId} chatFriend={currentChatFriend} />
           </div>
         </div>
       </div>

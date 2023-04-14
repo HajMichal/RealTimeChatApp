@@ -9,5 +9,5 @@ const userApi = axios.create({
 });
 
 
-export const loadMessage = async (data: number | null) => {
+export const loadMessage = async (data: number | null ) => {
     return await userApi.get(`/loadMessage?receiverId=${data}`)}

@@ -2,9 +2,9 @@ import React, { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { friend, friendProps, FriendViewProps } from "../interfaces";
 import remover from "../api/removeFriend";
-import { ReceiverIdContext } from "../App";
+import { MyContext } from "../App";
 
-import { BsThreeDotsVertical, BsFillChatDotsFill } from "react-icons/bs";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 
 
@@ -25,7 +25,7 @@ const FriendView: React.FC<FriendViewProps> = (props) => {
     },
   } )
 
-  const { handleReceiverId } = useContext(ReceiverIdContext)
+  const { handleReceiverId } = useContext(MyContext)
   
   const startChat = () => {
     handleReceiverId(props.data.friendsId);

@@ -7,17 +7,19 @@ interface chatTypes {
     _id: number
     username: string;
     receiverId: number | null
+    chatFriend: friend | undefined | null
 }
 
 interface messageData {
-    author: string;
+    authorId: number;
     time: string;
     message: string;
+    receiverId: number | null
 }
 interface sendMessage {
     message: string,
-    timestamp: string,
-    userId: number,
+    time: string,
+    authorId: number,
     receiverId: number | null
 }
 

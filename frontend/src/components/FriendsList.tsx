@@ -5,18 +5,19 @@ import { getFriendList } from "../api/getFriendList";
 import { userId, friend } from "../interfaces";
 
 import Friends from "./Friends";
-import { ReceiverIdContext } from "../App";
+import { MyContext } from "../App";
 
 const FriendsList = () => {
   const [currentChat, setCurrentChat] = useState();
   const [friendList, setFriendList] = useState<friend[]>([]);
-  const receiverId = useContext(ReceiverIdContext)
+  const { handleAllFriends } = useContext(MyContext)
 
   
   const { data, isLoading, isSuccess } = useQuery("friendList", getFriendList);
 
   useEffect(() => {
     if (data) setFriendList(data.data.friendList);
+    handleAllFriends(data?.data.friendList)
   }, [data]);
 
   return (
