@@ -7,7 +7,7 @@ async function saveMessage(message:string, time: string, receiverId: number, aut
     return await prisma.chats.create({
         data: {
             message: message,
-            timestamp: time,
+            time: time,
             reciverId: receiverId,
             author: {  connect: { id: authorId } }
         }
@@ -29,7 +29,7 @@ async function loadMessage(currentUserId: number, receiverId: number) {
             ]
         },
         orderBy: {
-            timestamp: "asc"
+            time: "asc"
         }
     })
 }

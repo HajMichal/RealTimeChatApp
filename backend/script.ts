@@ -15,12 +15,7 @@ async function main() {
   // if (existingFriend) throw new Error("This Friend already exists in your friend list")
 
 
-  // const addNewFriend = await prisma.friend.create({
-  //   data: {
-  //     friendsId: 5,
-  //     friendsName: "Klaudiaaaaa",
-  //     user: {connect : { id: 1 }}
-  //   }
+  // const addNewFriend = await prisma.chats.deleteMany({
   // })
   // console.log(addNewFriend)
 

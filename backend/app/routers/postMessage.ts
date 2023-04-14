@@ -6,6 +6,7 @@ const router = Router()
 
 router.post("/sendMessage", async (req, res) => {
     const {message, time, authorId, receiverId} = req.body
+    console.log(req.body)
     try {
         await saveMessage(message, time, receiverId, authorId)
         res.sendStatus(200)
