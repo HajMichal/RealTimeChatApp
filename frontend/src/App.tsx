@@ -36,9 +36,11 @@ function App() {
     setFriendsList(friendsList)
   }
   useEffect(() => {
-    friendsList?.forEach((friend) => friend.friendsId === receiverId ? setCurrentChatFriend(friend) : null )
-  }, [friendsList, receiverId])
-  console.log(currentChatFriend)
+    if(friendsList !== undefined) {
+      const friend = friendsList.find((friend) => friend.friendsId === receiverId);
+      setCurrentChatFriend(friend);
+    } 
+  }, [friendsList, receiverId]);
   return (
     <div className="flex w-full h-screen justify-center pb-14 pt-5 bg-dark">
       {isError ? <Alert /> : null}

@@ -7,12 +7,13 @@ import { TbSend } from "react-icons/tb";
 import { BsFillChatDotsFill } from "react-icons/bs";
 
 import Drawer from "./Drawer";
-import { msgInput, chatTypes, messageData } from "../interfaces";
+import { msgInput, chatTypes, messageData, friend } from "../interfaces";
 
 import { loadMessage } from "../api/getMessages";
 import { saveMessage } from "../api/saveMessage";
 
 const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
+
   const socket = useRef<Socket>();
   const [messageList, setMessageList] = useState<messageData[]>([]);
 
@@ -59,8 +60,10 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
   }, []);
 
   useEffect(() => {
-    setMessageList(data?.data)
-  }, [messageList])
+
+    // setMessageList(data?.data)
+    console.log(chatFriend)
+  }, [messageList, chatFriend])
 
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
     if (data.message !== "" && socket.current) {
@@ -91,7 +94,7 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
           senderId: _id,
         });
         mutate(messageData);
-        setMessageList([...messageList, messageData]);
+        // setMessageList([...messageList, messageData]);
       }
     }
     reset();
@@ -119,39 +122,39 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
               messageList.map((messageContent, index) => (
                 <div
                   className={
-                    username ===  messageContent.author 
+                    receiverId !==  messageContent.receiverId 
                       ? "chat chat-end my-3 "
                       : "chat chat-start my-3"
                   }
                   key={index}
                 >
                   <div className="chat-image avatar">
-                    {/* <div className="w-10 rounded-full">
+                      <div className="w-10 rounded-full">
                         <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-                      </div> */}
+                      </div>
                   </div>
                   <div className="chat-header">
-                    {messageContent.author}
+                    {messageContent.authorId}
                     <time className="text-xs opacity-50 mx-2">
                       {messageContent.time}
                     </time>
                   </div>
                   <div
                     className={
-                      username === messageContent.author
+                      receiverId !==  messageContent.receiverId 
                         ? "chat-bubble bg-brand text-light font-medium"
                         : "chat-bubble bg-darkblue text-light font-medium"
                     }
                   >
                     {messageContent.message}
-                  </div>
-                  {/* <div className="chat-footer opacity-50">
+                  </div> 
+                  <div className="chat-footer opacity-50">
                       Seen
-                    </div> */}
+                    </div>
                 </div>
               ))
             )}
-          </ul>
+          </ul> 
         </div>
       </div>
       <form
