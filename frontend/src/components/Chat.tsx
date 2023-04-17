@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { io, Socket } from "socket.io-client";
 import { useForm, SubmitHandler } from "react-hook-form";
 
+
 import { TbSend } from "react-icons/tb";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { motion } from "framer-motion"
@@ -12,6 +13,7 @@ import { msgInput, chatTypes, messageData} from "../interfaces";
 
 import { loadMessage } from "../api/getMessages";
 import { saveMessage } from "../api/saveMessage";
+import { formatTime } from "./formatTime";
 
 const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
 
@@ -57,7 +59,6 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
         receiverId: messageData.receiverId
       });
     });
-
   }, []);
 
   useEffect(() => {
@@ -67,12 +68,23 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
     if(arrivalMessage && chatFriend?.friendsId === arrivalMessage.userId) {
       setMessageList((prev) => [...prev, arrivalMessage]) 
     }
-    scrollToBottom()
   }, [chatFriend, isSuccess, arrivalMessage])
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      // @ts-ignore
+      messagesEndRef.current.scrollIntoView(
+        {
+          behavior: 'smooth',
+          block: 'end',
+          inline: 'nearest'
+        })
+    }
+  },
+  [messageList])
 
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
     if (data.message !== "" && socket.current) {
-
 
       const messageData = {
         message: data.message,
@@ -93,14 +105,9 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
         mutate(messageData);
       }
     }
-    scrollToBottom()
     reset();
   };
 
-  const scrollToBottom = () => {
-    // @ts-ignore
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
 
   return (
     <>
@@ -129,6 +136,7 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
             ) : (
               messageList.map((messageContent, index) => (
                 <div
+                  ref={messagesEndRef}
                   className={
                     _id ===  messageContent.userId 
                       ? "chat chat-end my-3 "
@@ -136,17 +144,19 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
                   }
                   key={index}
                 >
-                  {/* <div className="chat-image avatar">
-                      <div className="w-10 rounded-full">
-                        <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
-                      </div>
-                  </div> */}
-                  <div className="chat-header">
-                    {messageContent.userId}
-                    <time className="text-xs opacity-50 mx-2">
-                      {messageContent.time.toString()}
-                    </time>
-                  </div>
+   
+                    <div className="chat-image avatar">
+                        <div className="w-10 rounded-full">
+                          <img src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png" />
+                        </div>
+                    </div>
+                    <div className="chat-header">
+                      {chatFriend?.friendsId === messageContent.userId ? chatFriend.friendsName : username}
+                      <time className="text-xs opacity-50 mx-2">
+                        {/* {format(parseISO(messageContent.time), 'yyyy/MM/dd kk:mm')} */}
+                        {formatTime(messageContent.time)}
+                      </time>
+                    </div>
                   <div
                     className={
                       _id ===  messageContent.userId 
@@ -159,7 +169,7 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
                   {/* <div className="chat-footer opacity-50">
                       Seen
                     </div> */}
-                <div ref={messagesEndRef} />    
+                <div  />    
                 </div>
                 
 ))
