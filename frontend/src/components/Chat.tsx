@@ -7,7 +7,7 @@ import { TbSend } from "react-icons/tb";
 import { BsFillChatDotsFill } from "react-icons/bs";
 
 import Drawer from "./Drawer";
-import { msgInput, chatTypes, messageData, friend } from "../interfaces";
+import { msgInput, chatTypes, messageData, friend, sendMessage } from "../interfaces";
 
 import { loadMessage } from "../api/getMessages";
 import { saveMessage } from "../api/saveMessage";
@@ -38,32 +38,36 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
 
   useEffect(() => {
     if (!socket.current) return;
+    console.log(_id)
     socket.current.emit("addUser", _id);
     socket.current.on("getUsers", (users: any) => {
-      // console.log(users)
+      console.log(users)
     });
   }, [username, _id]);
 
   // Setting messages into message list
-  useEffect(() => {
-    if (!socket.current) return;
-    socket.current.on("reveice_message", (data: messageData) => {
-      setMessageList((rest_list) => [...rest_list, data]);
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   if (!socket.current) return;
+  //   socket.current.on("reveice_message", (data: messageData) => {
+  //     setMessageList((rest_list) => [...rest_list, data]);
+  //     console.log(messageList)
+  //   });
+  // }, [socket]);
 
   useEffect(() => {
     if (!socket.current) return;
     socket.current.on("getMessage", ({ messageData, from }: any) => {
+      console.log(messageData)
       setMessageList((rest_list) => [...rest_list, messageData]);
     });
   }, []);
 
   useEffect(() => {
-
-    // setMessageList(data?.data)
+    if (isSuccess && receiverId !== null) {
+      setMessageList(data.data)
+    }
     console.log(chatFriend)
-  }, [messageList, chatFriend])
+  }, [messageList, chatFriend, isSuccess])
 
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
     if (data.message !== "" && socket.current) {
@@ -81,7 +85,7 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
       const messageData = {
         message: data.message,
         receiverId: receiverId,
-        authorId: _id,
+        userId: _id,
         time: myDate,
       };
       if (isError) {
@@ -94,11 +98,14 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
           senderId: _id,
         });
         mutate(messageData);
-        // setMessageList([...messageList, messageData]);
+
+        setMessageList([...messageList, messageData]);
+        
       }
     }
     reset();
   };
+
 
   return (
     <>
@@ -110,6 +117,12 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
             <span className="text-brand">Chat</span>App
           </h1>
         </div>
+        {isLoading 
+        ? 
+        <div className="flex justify-center items-center ">
+          <div className="w-20 h-20 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>
+        </div>
+        :
         <div className="w-full h-full " id="text-area">
           <ul>
             {receiverId === null ? (
@@ -122,40 +135,41 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
               messageList.map((messageContent, index) => (
                 <div
                   className={
-                    receiverId !==  messageContent.receiverId 
+                    _id ===  messageContent.userId 
                       ? "chat chat-end my-3 "
                       : "chat chat-start my-3"
                   }
                   key={index}
                 >
-                  <div className="chat-image avatar">
+                  {/* <div className="chat-image avatar">
                       <div className="w-10 rounded-full">
                         <img src="/images/stock/photo-1534528741775-53994a69daeb.jpg" />
                       </div>
-                  </div>
+                  </div> */}
                   <div className="chat-header">
-                    {messageContent.authorId}
+                    {messageContent.userId}
                     <time className="text-xs opacity-50 mx-2">
                       {messageContent.time}
                     </time>
                   </div>
                   <div
                     className={
-                      receiverId !==  messageContent.receiverId 
+                      _id ===  messageContent.userId 
                         ? "chat-bubble bg-brand text-light font-medium"
                         : "chat-bubble bg-darkblue text-light font-medium"
                     }
                   >
                     {messageContent.message}
                   </div> 
-                  <div className="chat-footer opacity-50">
+                  {/* <div className="chat-footer opacity-50">
                       Seen
-                    </div>
+                    </div> */}
                 </div>
               ))
             )}
           </ul> 
         </div>
+        }
       </div>
       <form
         onSubmit={handleSubmit(sendMessage)}
@@ -165,12 +179,12 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
           {...register("message")}
           type="text"
           placeholder="Type here"
-          className="input input-bordered input-md rounded-none w-full max-w-lg mx-2"
+          className={receiverId !== null ? "input input-bordered input-md rounded-none w-full max-w-lg mx-2" : "hidden"}
           onKeyDown={(event) => {
             event.key === "Enter" && handleSubmit(sendMessage);
           }}
         />
-        <button type="submit" className="w-9 text-mid">
+        <button type="submit" className={receiverId !== null ? "w-9 text-mid block" : "hidden"} >
           {" "}
           <TbSend className="w-full h-full" />
         </button>
