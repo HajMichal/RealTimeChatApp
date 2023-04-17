@@ -12,13 +12,13 @@ interface chatTypes {
 
 interface messageData {
     userId: number;
-    time: string;
+    time: Date;
     message: string;
     receiverId: number | null
 }
 interface sendMessage {
     message: string,
-    time: string,
+    time: Date,
     userId: number,
     receiverId: number | null
 }

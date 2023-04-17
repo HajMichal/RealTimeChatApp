@@ -5,9 +5,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 
 import { TbSend } from "react-icons/tb";
 import { BsFillChatDotsFill } from "react-icons/bs";
+import { motion } from "framer-motion"
 
 import Drawer from "./Drawer";
-import { msgInput, chatTypes, messageData, friend, sendMessage } from "../interfaces";
+import { msgInput, chatTypes, messageData} from "../interfaces";
 
 import { loadMessage } from "../api/getMessages";
 import { saveMessage } from "../api/saveMessage";
@@ -15,8 +16,11 @@ import { saveMessage } from "../api/saveMessage";
 const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
 
   const socket = useRef<Socket>();
+  const queryClient = useQueryClient();
+  const messagesEndRef = useRef(null)
   const [messageList, setMessageList] = useState<messageData[]>([]);
-
+  const [arrivalMessage, setArrivalMessage] = useState<messageData>();
+  
   const { register, handleSubmit, reset } = useForm<msgInput>();
 
   const { data, isSuccess, isLoading } = useQuery({
@@ -25,7 +29,6 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
     enabled: receiverId !== undefined,
   });
 
-  const queryClient = useQueryClient();
   const { mutate, isError, error } = useMutation(saveMessage, {
     onSuccess() {
       queryClient.invalidateQueries("receiverId");
@@ -38,55 +41,44 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
 
   useEffect(() => {
     if (!socket.current) return;
-    console.log(_id)
     socket.current.emit("addUser", _id);
     socket.current.on("getUsers", (users: any) => {
       console.log(users)
     });
   }, [username, _id]);
 
-  // Setting messages into message list
-  // useEffect(() => {
-  //   if (!socket.current) return;
-  //   socket.current.on("reveice_message", (data: messageData) => {
-  //     setMessageList((rest_list) => [...rest_list, data]);
-  //     console.log(messageList)
-  //   });
-  // }, [socket]);
-
   useEffect(() => {
     if (!socket.current) return;
-    socket.current.on("getMessage", ({ messageData, from }: any) => {
-      console.log(messageData)
-      setMessageList((rest_list) => [...rest_list, messageData]);
+    socket.current.on("getMessage", ({messageData}) => {
+      setArrivalMessage({
+        message: messageData.message,
+        userId: messageData.userId,
+        time: messageData.time,
+        receiverId: messageData.receiverId
+      });
     });
+
   }, []);
 
   useEffect(() => {
     if (isSuccess && receiverId !== null) {
       setMessageList(data.data)
     }
-    console.log(chatFriend)
-  }, [messageList, chatFriend, isSuccess])
+    if(arrivalMessage && chatFriend?.friendsId === arrivalMessage.userId) {
+      setMessageList((prev) => [...prev, arrivalMessage]) 
+    }
+    scrollToBottom()
+  }, [chatFriend, isSuccess, arrivalMessage])
 
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
     if (data.message !== "" && socket.current) {
-      var myDate =
-        new Date(Date.now()).getFullYear() +
-        "-" +
-        new Date(Date.now()).getMonth() +
-        "-" +
-        new Date(Date.now()).getDate() +
-        " " +
-        new Date(Date.now()).getHours() +
-        ":" +
-        new Date(Date.now()).getMinutes();
+
 
       const messageData = {
         message: data.message,
-        receiverId: receiverId,
         userId: _id,
-        time: myDate,
+        time: new Date(Date.now()),
+        receiverId: receiverId,
       };
       if (isError) {
         console.log(error);
@@ -97,15 +89,18 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
           messageData,
           senderId: _id,
         });
+        setMessageList((prev) => [...prev, messageData])
         mutate(messageData);
-
-        setMessageList([...messageList, messageData]);
-        
       }
     }
+    scrollToBottom()
     reset();
   };
 
+  const scrollToBottom = () => {
+    // @ts-ignore
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
   return (
     <>
@@ -149,7 +144,7 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
                   <div className="chat-header">
                     {messageContent.userId}
                     <time className="text-xs opacity-50 mx-2">
-                      {messageContent.time}
+                      {messageContent.time.toString()}
                     </time>
                   </div>
                   <div
@@ -164,16 +159,21 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
                   {/* <div className="chat-footer opacity-50">
                       Seen
                     </div> */}
+                <div ref={messagesEndRef} />    
                 </div>
-              ))
+                
+))
             )}
           </ul> 
         </div>
         }
       </div>
-      <form
+      <motion.form
         onSubmit={handleSubmit(sendMessage)}
         className="flex justify-center self-center w-full row-start-6"
+        initial={{ opacity: 0, scale: receiverId !== null ? 0.5 : 0 }}
+        animate={{ opacity: receiverId !== null ? 1 : 0, scale: receiverId !== null ? 1 : 0 }}
+        transition={{ duration: 0.4 }}
       >
         <input
           {...register("message")}
@@ -188,7 +188,7 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
           {" "}
           <TbSend className="w-full h-full" />
         </button>
-      </form>
+      </motion.form>
     </>
   );
 };
