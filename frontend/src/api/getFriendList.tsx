@@ -3,12 +3,11 @@ import axios from "axios";
 const userApi = axios.create({
   baseURL: "http://localhost:3000",
   headers: {
-    "Content-Type": "text/plain"
+    "Content-Type": "text/plain",
   },
-  withCredentials: true
+  withCredentials: true,
 });
 
-
-
 export const getFriendList = async () => {
-    return await userApi.get("/friendList")}
+  return await userApi.get("/friendList");
+};

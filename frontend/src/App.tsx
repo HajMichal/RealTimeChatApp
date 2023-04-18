@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-
 import getCurrentUserData from "./api/getUserApi";
 
 import Chat from "./components/Chat";
@@ -8,20 +7,21 @@ import Alert from "./components/Alert";
 import LookForFriends from "./components/LookForFriends";
 import FriendsList from "./components/FriendsList";
 import { friend } from "./interfaces";
+import Drawer from "./components/Drawer";
 
 type ContextType = {
   handleReceiverId: (receiverId: number) => void;
   handleAllFriends: (friendsList: friend[]) => void;
 };
-export const MyContext = React.createContext<ContextType>({  
-  handleReceiverId: () => {}, 
+export const MyContext = React.createContext<ContextType>({
+  handleReceiverId: () => {},
   handleAllFriends: () => {},
-})
+});
 
 function App() {
-  const [receiverId, setReceiverId] = useState<number | null>(null)
-  const [friendsList, setFriendsList] = useState<friend[]>()
-  const [currentChatFriend, setCurrentChatFriend] = useState<friend>()
+  const [receiverId, setReceiverId] = useState<number | null>(null);
+  const [friendsList, setFriendsList] = useState<friend[]>();
+  const [currentChatFriend, setCurrentChatFriend] = useState<friend>();
 
   const { data, isError } = useQuery("user", getCurrentUserData, {
     retry: 2,
@@ -29,22 +29,30 @@ function App() {
   });
 
   const handleReceiverId = (receiverId: number) => {
-    setReceiverId(receiverId)
-  }
+    setReceiverId(receiverId);
+  };
 
   const handleAllFriends = (friendsList: friend[]) => {
-    setFriendsList(friendsList)
-  }
+    setFriendsList(friendsList);
+  };
   useEffect(() => {
-    if(friendsList !== undefined) {
-      const friend = friendsList.find((friend) => friend.friendsId === receiverId);
+    if (friendsList !== undefined) {
+      const friend = friendsList.find(
+        (friend) => friend.friendsId === receiverId
+      );
       setCurrentChatFriend(friend);
-    } 
+    }
   }, [friendsList, receiverId]);
+
   return (
     <div className="flex w-full h-screen justify-center pb-14 pt-5 bg-dark">
       {isError ? <Alert /> : null}
 
+      <div className="absolute top-10 left-5 z-40 tablet:hidden">
+        <MyContext.Provider value={{ handleReceiverId, handleAllFriends }}>
+          <Drawer />
+        </MyContext.Provider>
+      </div>
       <div
         className={
           isError
@@ -61,21 +69,24 @@ function App() {
               Hey {data?.data.name}
             </h2>
 
-
             <div className="w-full mt-5">
+              <LookForFriends mainUserId={data?.data.id} />
 
-                <LookForFriends mainUserId={data?.data.id} />
-
-                <MyContext.Provider value={{handleReceiverId, handleAllFriends}} >
-                  <FriendsList />
-                </MyContext.Provider> 
-
+              <MyContext.Provider
+                value={{ handleReceiverId, handleAllFriends }}
+              >
+                <FriendsList />
+              </MyContext.Provider>
             </div>
           </div>
 
           <div className="bg-dark row-start-1 row-span-5 p-5 tablet:col-start-2 col-span-3 tablet:col-span-2 grid grid-rows-6  border-2 border-l  border-brand rounded-xl">
-   
-            <Chat username={data?.data.name} _id={data?.data.id} receiverId={receiverId} chatFriend={currentChatFriend} />
+            <Chat
+              username={data?.data.name}
+              _id={data?.data.id}
+              receiverId={receiverId}
+              chatFriend={currentChatFriend}
+            />
           </div>
         </div>
       </div>

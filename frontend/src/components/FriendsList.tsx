@@ -1,23 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
-import { useQuery, useQueryClient  } from "react-query";
 import { getFriendList } from "../api/getFriendList";
-import { userId, friend } from "../interfaces";
-
-import Friends from "./Friends";
 import { MyContext } from "../App";
+import { friend } from "../interfaces";
+import Friends from "./Friends";
 
 const FriendsList = () => {
-  const [currentChat, setCurrentChat] = useState();
   const [friendList, setFriendList] = useState<friend[]>([]);
-  const { handleAllFriends } = useContext(MyContext)
+  const { handleAllFriends } = useContext(MyContext);
 
-  
   const { data, isLoading, isSuccess } = useQuery("friendList", getFriendList);
 
   useEffect(() => {
     if (data) setFriendList(data.data.friendList);
-    handleAllFriends(data?.data.friendList)
+    handleAllFriends(data?.data.friendList);
   }, [data]);
 
   return (
@@ -27,7 +24,7 @@ const FriendsList = () => {
           <div className="w-12 h-12 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>
         </div>
       ) : null}
-      {isSuccess ? <Friends friends={friendList}  /> : null}
+      {isSuccess ? <Friends friends={friendList} /> : null}
     </div>
   );
 };

@@ -1,51 +1,28 @@
-import React, { useState } from "react";
 import { BiMenu } from "react-icons/bi";
-import "flowbite";
 import LookForFriends from "./LookForFriends";
 import { useQuery } from "react-query";
 import getCurrentUserData from "../api/getUserApi";
 import FriendsList from "./FriendsList";
-import { friend } from "../interfaces";
-
-type ContextType = {
-  handleReceiverId: (receiverId: number) => void;
-  handleAllFriends: (friendsList: friend[]) => void;
-};
-export const MyContext = React.createContext<ContextType>({  
-  handleReceiverId: () => {}, 
-  handleAllFriends: () => {},
-})
+import "flowbite";
 
 const Drawer = () => {
-  const [friendsList, setFriendsList] = useState<friend[]>()
-  const [receiverId, setReceiverId] = useState<number | null>(null)
-
-
-  const { data, isError } = useQuery("user", getCurrentUserData, {
+  const { data } = useQuery("user", getCurrentUserData, {
     retry: 2,
     retryDelay: 700,
   });
-
-  const handleReceiverId = (receiverId: number) => {
-    setReceiverId(receiverId)
-  }
-
-  const handleAllFriends = (friendsList: friend[]) => {
-    setFriendsList(friendsList)
-  }
 
   return (
     <>
       <div className="text-center">
         <button
-          className="text-white bg-brand glass focus:ring-4 w-11 h-11 focus:ring-mid font-medium rounded-lg text-sm  my-2    focus:outline-none"
+          className="text-white text-center bg-brand glass focus:ring-4 w-11 h-11 focus:ring-mid font-medium rounded-lg text-sm  my-2    focus:outline-none"
           type="button"
           data-drawer-target="drawer-left-example"
           data-drawer-show="drawer-left-example"
           data-drawer-placement="left"
           aria-controls="drawer-left-example"
         >
-          <BiMenu className="h-8 w-10 text-light" />
+          <BiMenu className="h-8 w-11 text-light" />
         </button>
       </div>
 
@@ -58,19 +35,17 @@ const Drawer = () => {
         aria-labelledby="drawer-left-label"
       >
         <div>
-            <h1 className="w-full text-center mt-2 font-semibold text-4xl italic">
-              <span className="text-brand">Chat</span>App
-            </h1>
-            <h2 className="w-full mt-5 text-center text-2xl">
-              Hey {data?.data.name}
-            </h2>
+          <h1 className="w-full text-center mt-2 font-semibold text-4xl italic">
+            <span className="text-brand">Chat</span>App
+          </h1>
+          <h2 className="w-full mt-5 text-center text-2xl">
+            Hey {data?.data.name}
+          </h2>
         </div>
         <div className="w-full mt-5">
           <LookForFriends mainUserId={data?.data.id} />
 
-          <MyContext.Provider value={{handleReceiverId, handleAllFriends}} >
-            <FriendsList />
-          </MyContext.Provider> 
+          <FriendsList />
         </div>
       </div>
     </>

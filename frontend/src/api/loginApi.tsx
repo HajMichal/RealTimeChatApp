@@ -3,7 +3,7 @@ import axios from "axios";
 const loginApi = axios.create({
   baseURL: "http://localhost:3000",
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   },
   withCredentials: true,
 });
@@ -13,7 +13,7 @@ interface loginUser {
   password: string;
 }
 interface createUser {
-  name: string
+  name: string;
   email: string;
   password: string;
 }
@@ -23,7 +23,5 @@ export const postData = async (data: loginUser) => {
 };
 
 export const createUser = async (data: createUser) => {
-  return await loginApi.post("/register", data)
-}
-
-
+  return await loginApi.post("/register", data);
+};

@@ -1,69 +1,68 @@
-
 interface msgInput {
-    message: string;
-};
+  message: string;
+}
 
 interface chatTypes {
-    _id: number
-    username: string;
-    receiverId: number | null
-    chatFriend: friend | undefined | null
+  _id: number;
+  username: string;
+  receiverId: number | null;
+  chatFriend: friend | undefined | null;
 }
 
 interface messageData {
-    userId: number;
-    time: Date;
-    message: string;
-    receiverId: number | null
+  userId: number;
+  time: Date;
+  message: string;
+  receiverId: number | null;
 }
 interface sendMessage {
-    message: string,
-    time: Date,
-    userId: number,
-    receiverId: number | null
+  message: string;
+  time: Date;
+  userId: number;
+  receiverId: number | null;
 }
 
 interface user {
-    email: string,
-    password: string
+  email: string;
+  password: string;
 }
 
 interface newUser {
-    name: string,
-    email: string,
-    password: string
+  name: string;
+  email: string;
+  password: string;
 }
 interface searchedUser {
-    id: number,
-    name: string
+  id: number;
+  name: string;
 }
 interface userId {
-    mainUserId: number
-  }
-  
+  mainUserId: number;
+}
+
 interface friend {
-    id: number
-    friendsId: number
-    userId: number
-    friendsName: string
+  id: number;
+  friendsId: number;
+  userId: number;
+  friendsName: string;
 }
 interface friendProps {
-    friends: any
-  }
-  interface FriendViewProps {
-    data: friend;
-  }
-
- export type {
-    msgInput,
-    chatTypes,
-    messageData,
-    user,
-    newUser,
-    searchedUser,
-    userId,
-    friend,
-    friendProps,
-    FriendViewProps,
-    sendMessage
+  friends: any;
 }
+interface FriendViewProps {
+  data: friend;
+}
+
+export type {
+  msgInput,
+  chatTypes,
+  messageData,
+  user,
+  newUser,
+  searchedUser,
+  userId,
+  friend,
+  friendProps,
+  FriendViewProps,
+  sendMessage,
+};
