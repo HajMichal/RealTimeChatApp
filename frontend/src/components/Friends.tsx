@@ -8,7 +8,7 @@ import remover from "../api/removeFriend";
 
 function Friends({ friends }: friendProps) {
   return friends.map((friend: friend) => (
-    <FriendView key={friend.id} data={friend} />
+      <FriendView key={friend.id} data={friend} />
   ));
 }
 
@@ -34,17 +34,20 @@ const FriendView: React.FC<FriendViewProps> = (props) => {
   };
 
   return (
-    <div className="card-body my-3 p-1 text-mid w-full" key={props.data.id}>
+    <div className="card-body my-3 p-1 text-mid w-full duration-300 hover:cursor-pointer hover:shadow-md hover:shadow-darkblue"  key={props.data.id}>
+
+
       <div className="grid grid-cols-8 h-14 items-center gap-3 ml-4">
-        <div className="avatar -my-4 col-span-2">
+        <div className="avatar -my-4 col-span-2" onClick={startChat}>
           <div className="w-12 rounded-full">
             <img src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png" />
           </div>
         </div>
 
         <button
-          className="col-start-3 col-end-7 overflow-x-hidden hover:cursor-pointer"
+          className="col-start-3 h-full col-end-7 overflow-x-hidden hover:cursor-pointer"
           onClick={startChat}
+          
         >
           {props.data.friendsName}
         </button>
@@ -69,8 +72,10 @@ const FriendView: React.FC<FriendViewProps> = (props) => {
           </label>
         </div>
       </div>
+
+
     </div>
-  );
+    );
 };
 
 export default Friends;

@@ -60,7 +60,7 @@ const LookForFriends = (mainUserId: userId) => {
           />
         </div>
       </form>
-      <div className="max-h-96 w-full overflow-y-scroll">
+      <div className="max-h-96 w-full overflow-y-scroll items-center">
         {isLoading ? (
           <div className="flex justify-center items-center">
             <div className="w-12 h-12 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>
@@ -71,7 +71,7 @@ const LookForFriends = (mainUserId: userId) => {
           ? data?.data.map((user: searchedUser, key: number) => (
               <div
                 key={key}
-                className="card w-11/12 bg-dark shadow-xl ml-2 my-1 border border-brand"
+                className="card w-auto bg-dark shadow-xl ml-2 my-1 border border-brand"
               >
                 <div className="card-body text-mid w-3/4 overflow-x-hidden ">
                   <div className="flex items-center gap-3">

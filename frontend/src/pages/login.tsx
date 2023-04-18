@@ -22,7 +22,7 @@ const login = () => {
     mutate(user);
   };
 
-  const { mutate } = useMutation(postData, {
+  const { mutate, isLoading } = useMutation(postData, {
     onSuccess: (data) => {
       console.log(data);
       navigate("/", { replace: true });
@@ -70,9 +70,21 @@ const login = () => {
               className="input input-bordered w-full max-w-xs"
             />
           </div>
-          <button className="btn btn-wide glass my-6 bg-brand text-light">
+          <button
+            className={
+              isLoading
+                ? "btn btn-wide glass my-6 bg-brand text-light btn-disabled"
+                : "btn btn-wide glass my-6 bg-brand text-light"
+            }
+            disabled={isLoading}
+          >
             Log in!
           </button>
+          {isLoading ? (
+            <div className="flex justify-center items-center absolute w-full -mt-6">
+              <div className="w-12 h-12 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>
+            </div>
+          ) : null}
         </form>
         <div>
           <fieldset className="border-t-2 border-mid mx-10">

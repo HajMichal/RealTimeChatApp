@@ -18,7 +18,7 @@ const FriendsList = () => {
   }, [data]);
 
   return (
-    <div className="w-full max-h-96 overflow-y-scroll mt-10">
+    <div className="w-full max-h-96 overflow-y-scroll mt-10 ">
       {isLoading ? (
         <div className="flex justify-center items-center">
           <div className="w-12 h-12 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>

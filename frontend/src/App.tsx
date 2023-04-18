@@ -71,7 +71,7 @@ function App() {
 
             <div className="w-full mt-5">
               <LookForFriends mainUserId={data?.data.id} />
-
+              
               <MyContext.Provider
                 value={{ handleReceiverId, handleAllFriends }}
               >
