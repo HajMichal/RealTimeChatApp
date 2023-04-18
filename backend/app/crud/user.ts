@@ -24,7 +24,7 @@ async function checkLogin(email: string, password: string) {
   }
 }
 
-async function getAllUsers(searchedValue?: any) {
+async function getAllUsers(searchedValue?: string) {
   const users = await prisma.user.findMany({
     select: {
       id: true,
@@ -34,6 +34,7 @@ async function getAllUsers(searchedValue?: any) {
     where: {
       name: {
         contains: searchedValue,
+        mode: 'insensitive'
       },
     },
   });

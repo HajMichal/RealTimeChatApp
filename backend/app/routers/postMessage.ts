@@ -4,8 +4,7 @@ import { saveMessage } from "../crud/conversation";
 const router = Router();
 
 router.post("/sendMessage", async (req, res) => {
-  const { message, time, userId, receiverId } = req.body;
-  console.log(req.body);
+  const { message, time, userId, receiverId } = req.body;;
   try {
     await saveMessage(message, time, receiverId, userId);
     res.sendStatus(200);

@@ -10,7 +10,6 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await checkLogin(email, password);
-
     createAccessToken(user, res);
   } catch (err) {
     if (email == "" || password == "") {

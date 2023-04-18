@@ -4,9 +4,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function addFriend(
-  friendsId: number,
+  friendsId: string,
   friendsName: string,
-  mainUserId: number
+  mainUserId: string
 ) {
   const getUser = await prisma.user.findUnique({
     where: { id: mainUserId },
@@ -36,15 +36,15 @@ async function addFriend(
   return createUser;
 }
 
-async function getFriends(userId: number) {
+async function getFriends(userId: string) {
   const getUser = await prisma.user.findUnique({
     where: { id: userId },
-    include: { friends: true },
+    include: { friends: true }
   });
   return getUser?.friends;
 }
 
-async function removeFriend(id: number) {
+async function removeFriend(id: string) {
   const friend = await prisma.friend.findUnique({
     where: { id: id },
     select: { userId: true },

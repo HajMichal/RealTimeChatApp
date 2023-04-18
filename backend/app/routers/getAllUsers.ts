@@ -6,7 +6,7 @@ const router = Router();
 router.get("/allUsers", async (req, res) => {
   const { searchedValue } = req.query;
 
-  const usersList = await getAllUsers(searchedValue);
+  const usersList = await getAllUsers(searchedValue as string);
   res.send(usersList).status(200);
 });
 

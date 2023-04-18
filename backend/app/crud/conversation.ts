@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 async function saveMessage(
   message: string,
   time: string,
-  receiverId: number,
-  userId: number
+  receiverId: string,
+  userId: string
 ) {
   return await prisma.chats.create({
     data: {
@@ -18,7 +18,7 @@ async function saveMessage(
   });
 }
 
-async function loadMessage(currentUserId: number, receiverId: number) {
+async function loadMessage(currentUserId: string, receiverId: string) {
   return await prisma.chats.findMany({
     where: {
       OR: [
