@@ -1,10 +1,8 @@
 import { Router } from 'express'
-
 import { addFriend } from '../crud/friends';
 import { FriendExistsError, TryingToAddYouselfError } from '../errors';
 
 const router = Router()
-
 
 router.post('/addFriend', async (req, res) => {
     const {friendsId, friendsName, mainUserId } = req.body;

@@ -1,32 +1,25 @@
 interface userInterface {
-    name: string,
-    email: string,
-    password: string
+  name: string;
+  email: string;
+  password: string;
 }
 
 interface sendMsg {
-  senderId: number
-  receiverId: number
-  messageData: object
+  receiverId: number;
+  messageData: object;
 }
 
 interface users {
-  userId: number
-  socketId: number
+  userId: number;
+  socketId: string;
 }
 
-
-
 declare global {
-    namespace Express {
-      interface Request {
-        user: userInterface;
-      }
+  namespace Express {
+    interface Request {
+      user: userInterface;
     }
   }
+}
 
-export {
-    userInterface,
-    sendMsg,
-    users
- }
+export { userInterface, sendMsg, users };

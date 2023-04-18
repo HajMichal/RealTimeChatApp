@@ -1,57 +1,59 @@
 import { FriendExistsError, TryingToAddYouselfError } from "../errors";
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "@prisma/client";
 
+const prisma = new PrismaClient();
 
-const prisma  = new PrismaClient();
+async function addFriend(
+  friendsId: number,
+  friendsName: string,
+  mainUserId: number
+) {
+  const getUser = await prisma.user.findUnique({
+    where: { id: mainUserId },
+    include: { friends: true },
+  });
 
-async function addFriend(friendsId: number, friendsName: string, mainUserId: number){
-    
-    const getUser = await prisma.user.findUnique({
-        where: { id: mainUserId },
-        include: {friends: true}
-      })
-    
-    if(!getUser) return
+  if (!getUser) return;
 
-    const existingFriend = getUser?.friends.find((friend)=>  friend.friendsId === friendsId ? friend : null )
-    const thisUser = getUser.id === friendsId ? true : false    
-    if(!!existingFriend) throw new FriendExistsError("This user is already in your friend's list")
-    if(thisUser) throw new TryingToAddYouselfError("You can not add yourself to your friend's list")
+  const existingFriend = getUser?.friends.find((friend) =>
+    friend.friendsId === friendsId ? friend : null
+  );
+  const thisUser = getUser.id === friendsId ? true : false;
+  if (!!existingFriend)
+    throw new FriendExistsError("This user is already in your friend's list");
+  if (thisUser)
+    throw new TryingToAddYouselfError(
+      "You can not add yourself to your friend's list"
+    );
 
-    const createUser = await prisma.friend.create({
-      data: {
-        friendsId: friendsId,
-        friendsName: friendsName,
-        user: { connect: { id: mainUserId }}
-      }
-    })
-    return createUser
+  const createUser = await prisma.friend.create({
+    data: {
+      friendsId: friendsId,
+      friendsName: friendsName,
+      user: { connect: { id: mainUserId } },
+    },
+  });
+  return createUser;
 }
 
-
-async function getFriends(userId: number ){
-  
+async function getFriends(userId: number) {
   const getUser = await prisma.user.findUnique({
     where: { id: userId },
-    include: {friends: true}
-  })
-  return getUser?.friends
+    include: { friends: true },
+  });
+  return getUser?.friends;
 }
 
-async function removeFriend( id: number ){
+async function removeFriend(id: number) {
   const friend = await prisma.friend.findUnique({
     where: { id: id },
-    select: { userId: true }
-  })
-  if(!friend) throw new Error("Friend not found")
+    select: { userId: true },
+  });
+  if (!friend) throw new Error("Friend not found");
   const removedFriend = await prisma.friend.delete({
-    where: { id: id }
-  })
-  return removedFriend
+    where: { id: id },
+  });
+  return removedFriend;
 }
 
-export {
-    addFriend,
-    getFriends,
-    removeFriend
-}
+export { addFriend, getFriends, removeFriend };

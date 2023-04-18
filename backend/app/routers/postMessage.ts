@@ -1,19 +1,18 @@
-import { Router } from 'express'
-import { saveMessage } from '../crud/conversation'
+import { Router } from "express";
+import { saveMessage } from "../crud/conversation";
 
-const router = Router()
-
+const router = Router();
 
 router.post("/sendMessage", async (req, res) => {
-    const {message, time, authorId, receiverId} = req.body
-    console.log(req.body)
-    try {
-        await saveMessage(message, time, receiverId, authorId)
-        res.sendStatus(200)
-    } catch (error) {
-        console.log(error)
-        res.send(error).status(500)
-    }
-})
+  const { message, time, userId, receiverId } = req.body;
+  console.log(req.body);
+  try {
+    await saveMessage(message, time, receiverId, userId);
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.send(error).status(500);
+  }
+});
 
-export default router
+export default router;
