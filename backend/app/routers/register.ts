@@ -12,8 +12,11 @@ const router = Router();
 
 router.post("/register", async (req: Request, res) => {
   const { name, email, password } = req.body;
-
+  
   try {
+    if(await get_user_by_email(email)) throw new Error("Already exists")
+    if (name.length < 3) throw new Error("Short name")
+
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = await prisma.user.create({
@@ -25,14 +28,16 @@ router.post("/register", async (req: Request, res) => {
     });
     createAccessToken(user, res);
   } catch (err) {
-    if (name == "" || email == "" || password == "") {
-      res.status(406).json({ message: "Please fill empty fileds" });
-    } else if (await get_user_by_email(email)) {
-      res.status(422).json({ message: "User with this email already exists" });
-    } else {
-      res.sendStatus(500);
+      if ((err as Error)?.message === "Already exists") {
+        res.status(409).json({ message: "Already exists" });
+      } 
+      else if ((err as Error)?.message === "Short name"){
+        res.status(400).json({ message: "Short name" })
+      } 
+      else {
+        res.sendStatus(500);
+      }
     }
-  }
 });
 
 export default router;

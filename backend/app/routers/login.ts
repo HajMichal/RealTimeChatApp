@@ -12,12 +12,13 @@ router.post("/login", async (req, res) => {
     const user = await checkLogin(email, password);
     createAccessToken(user, res);
   } catch (err) {
-    if (email == "" || password == "") {
-      res.status(406).json({ message: "Please fill empty fileds" });
-    } else if (err) {
-      res.status(401).json({ message: "Invalid Crednetials" });
+    console.log((err as Error)?.message);
+    if ((err as Error)?.message === "Invalid E-mail") {
+      res.status(401).json({ message: "Invalid E-mail" });
+    } else if ((err as Error)?.message === "Invalid Password") {
+      res.status(401).json({ message: "Invalid Password" });
     } else {
-      res.status(404).json({ message: "Not known error" });
+      res.status(500).json({ message: "Not known error" });
     }
   }
 });
