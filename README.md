@@ -9,6 +9,18 @@ The most original idea for project
 * You can start chatting with your friends
 * You can remove friend from friends list
 
+# 🎨 Colors 
+
+| Color           | Hex                                                                  |
+| --------------- | -------------------------------------------------------------------- |
+| Brand Color     | ![#F97316](https://via.placeholder.com/15/F97316/F97316.png) #F97316 |
+| Dark Color      | ![#111827](https://via.placeholder.com/15/111827/111827.png) #111827 |
+| Mid Color       | ![#B5BBC7](https://via.placeholder.com/15/B5BBC7/B5BBC7.png) #B5BBC7 |
+| Light Color     | ![#F8FAFC](https://via.placeholder.com/15/F8FAFC/F8FAFC.png) #F8FAFC |
+
+<br/>
+<br/>
+
 <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.gif" alt="🌟" width="32" height="32">
 
 Leave a star if you like it 
