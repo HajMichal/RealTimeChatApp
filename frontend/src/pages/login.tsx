@@ -22,13 +22,13 @@ const login = () => {
     mutate(user);
   };
 
-  const { mutate, isLoading } = useMutation(postData, {
+  const { mutate, isLoading, isError, error } = useMutation(postData, {
     onSuccess: (data) => {
       console.log(data);
       navigate("/", { replace: true });
     },
   });
-
+  console.log((error as any)?.response.data.message)
   return (
     <div className="w-full flex justify-center bg-dark laptop:pt-40 h-screen">
       <div className="bg-dark desktop:w-1/3 tablet:h-min tablet:mt-16 max-w-md rounded-sm">
@@ -45,8 +45,12 @@ const login = () => {
           className="w-full p-3 flex flex-wrap justify-center"
         >
           <div className="form-control w-full max-w-xs mb-4">
-            <label className="label">
-              <span className="label-text">Type in your e-mail</span>
+          <label className="label">
+              {
+                isError && (error as any).response.data.message === "Invalid E-mail" 
+                ? <span className="label-text text-error">Invalid e-mail</span>
+                : <span className="label-text">E-mail</span>
+              }
             </label>
             <input
               {...register("email", {
@@ -59,7 +63,11 @@ const login = () => {
           </div>
           <div className="form-control w-full max-w-xs">
             <label className="label">
-              <span className="label-text">Type in your password</span>
+              {
+                isError && (error as any).response.data.message === "Invalid Password" 
+                ? <span className="label-text text-error">Invalid password</span>
+                : <span className="label-text">Password</span>
+              }
             </label>
             <input
               {...register("password", {
@@ -67,7 +75,7 @@ const login = () => {
               })}
               type="password"
               placeholder="Type here"
-              className="input input-bordered w-full max-w-xs"
+              className={isError ? "input input-error input-bordered w-full max-w-xs" :"input input-bordered w-full max-w-xs"}
             />
           </div>
           <button
@@ -80,11 +88,15 @@ const login = () => {
           >
             Log in!
           </button>
-          {isLoading ? (
-            <div className="flex justify-center items-center absolute w-full -mt-6">
-              <div className="w-12 h-12 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>
-            </div>
-          ) : null}
+          {
+            isLoading 
+            ? (
+                <div className="flex justify-center items-center absolute w-full -mt-6">
+                  <div className="w-12 h-12 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>
+                </div>
+              ) 
+            : null
+          }
         </form>
         <div>
           <fieldset className="border-t-2 border-mid mx-10">

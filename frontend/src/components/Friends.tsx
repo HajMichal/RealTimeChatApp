@@ -75,6 +75,7 @@ const FriendView: React.FC<FriendViewProps> = (props) => {
 
 
     </div>
+
     );
 };
 
