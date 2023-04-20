@@ -20,6 +20,11 @@ The most original idea for project
 
 ## 📔 Development
 
+You have to make connection to mongoDB and create .env file with:
+* DATABASE_URL = "mongodb+srv://< username >:< password >@< dbName >.pjzssmc.mongodb.net"
+* ACCESS_TOKEN_SECRET = bar
+* REFRESH_TOKEN_SECRET = bar
+
 ```bash
 git clone https://github.com/MichalBrx/RealTimeChatApp.git
 ```
@@ -41,8 +46,6 @@ npm install
 
 npm run dev
 ```
-
-
 
 <br/>
 <br/>
