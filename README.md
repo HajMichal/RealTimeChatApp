@@ -9,7 +9,7 @@ The most original idea for project
 * You can start chatting with your friends
 * You can remove friend from friends list
 
-# 🎨 Colors 
+## 🎨 Colors 
 
 | Color           | Hex                                                                  |
 | --------------- | -------------------------------------------------------------------- |
@@ -18,7 +18,7 @@ The most original idea for project
 | Mid Color       | ![#B5BBC7](https://via.placeholder.com/15/B5BBC7/B5BBC7.png) #B5BBC7 |
 | Light Color     | ![#F8FAFC](https://via.placeholder.com/15/F8FAFC/F8FAFC.png) #F8FAFC |
 
-## Development
+## 📔 Development
 
 ```bash
 git clone https://github.com/MichalBrx/RealTimeChatApp.git
