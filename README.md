@@ -18,6 +18,32 @@ The most original idea for project
 | Mid Color       | ![#B5BBC7](https://via.placeholder.com/15/B5BBC7/B5BBC7.png) #B5BBC7 |
 | Light Color     | ![#F8FAFC](https://via.placeholder.com/15/F8FAFC/F8FAFC.png) #F8FAFC |
 
+## Development
+
+```bash
+git clone https://github.com/MichalBrx/RealTimeChatApp.git
+```
+
+```bash
+
+cd backend
+
+npm install
+
+cd app
+
+npx nodemon index.ts
+```
+```bash
+cd frontend
+
+npm install
+
+npm run dev
+```
+
+
+
 <br/>
 <br/>
 
