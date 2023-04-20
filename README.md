@@ -21,7 +21,7 @@ The most original idea for project
 ## 📔 Development
 
 You have to make connection to mongoDB and create .env file with:
-* DATABASE_URL = "mongodb+srv://< username >:< password >@< dbName >.pjzssmc.mongodb.net"
+* DATABASE_URL = "mongodb+srv://< username >:< password >@ChatApp.pjzssmc.mongodb.net/ChatApp?retryWrites=true&w=majority"
 * ACCESS_TOKEN_SECRET = 'example token'
 * REFRESH_TOKEN_SECRET = 'example token'
 
