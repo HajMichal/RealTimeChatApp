@@ -80,6 +80,7 @@ io.on("connection", (socket: any) => {
     if (!user) return;
     io.to(user.socketId).emit("getMessage", {
       messageData,
+      isSentData: true
     });
   });
 

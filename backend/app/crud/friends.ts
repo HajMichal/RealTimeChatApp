@@ -39,7 +39,7 @@ async function addFriend(
 async function getFriends(userId: string) {
   const getUser = await prisma.user.findUnique({
     where: { id: userId },
-    include: { friends: true }
+    include: { friends: true },
   });
   return getUser?.friends;
 }
@@ -56,4 +56,26 @@ async function removeFriend(id: string) {
   return removedFriend;
 }
 
-export { addFriend, getFriends, removeFriend };
+async function setNotification(receiverId: string, userId: string) {
+  const friend = await prisma.friend.findUnique({
+    where: { friendsId: receiverId },
+  });
+  console.log(friend)
+  if (friend) {
+    if (friend.isSentMessage === true) return null;
+    const notification = await prisma.friend.updateMany({
+      where: { AND:  [
+        {friendsId: receiverId}, 
+        {userId: userId}
+      ] },
+      data: { isSentMessage: true },
+    });
+    return notification;
+  } else {
+    console.log({FriendData:friend});
+  }
+}
+
+
+
+export { addFriend, getFriends, removeFriend, setNotification };

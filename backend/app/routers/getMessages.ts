@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { loadMessage } from "../crud/conversation";
+
+
 const jwt = require("jsonwebtoken");
 
 const router = Router();
@@ -7,7 +9,7 @@ const router = Router();
 router.get("/loadMessage", async (req, res) => {
   const currentAccessToken = req.cookies.accessToken;
   const { receiverId } = req.query;
-  const id = receiverId?.toString()
+
   if (!currentAccessToken) return res.status(401).end();
   try {
     var payload = jwt.verify(
@@ -16,6 +18,7 @@ router.get("/loadMessage", async (req, res) => {
     );
     const currentUserId = payload.id;
     const messages = await loadMessage(currentUserId, receiverId as string);
+
     const formattedMessages = messages.map((message) => ({
       ...message,
       time: new Date(message.time),
