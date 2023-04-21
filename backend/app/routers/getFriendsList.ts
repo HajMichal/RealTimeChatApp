@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getFriends } from "../crud/friends";
+import { jwtVerify } from "../jwt/jwt";
 
 const jwt = require("jsonwebtoken");
 
@@ -10,10 +11,7 @@ router.get("/friendList", async (req, res) => {
   if (!currentAccessToken) return res.status(401).end();
 
   try {
-    var payload = jwt.verify(
-      currentAccessToken,
-      process.env.ACCESS_TOKEN_SECRET
-    );
+    var payload = jwtVerify(currentAccessToken)
     const currentUserId = payload.id;
     const friendList = await getFriends(currentUserId);
     res.json({ friendList: friendList });

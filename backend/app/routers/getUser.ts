@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import { jwtVerify } from "../jwt/jwt";
 const jwt = require("jsonwebtoken");
 
 const router = Router();
@@ -9,10 +10,7 @@ router.get("/user", (req: Request, res: Response) => {
   if (!currentAccessToken) return res.status(401).end();
 
   try {
-    var payload = jwt.verify(
-      currentAccessToken,
-      process.env.ACCESS_TOKEN_SECRET
-    );
+    var payload = jwtVerify(currentAccessToken)
     res.send(payload);
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {

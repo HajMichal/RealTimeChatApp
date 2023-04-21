@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { Chats, PrismaClient } from "@prisma/client";
+
 
 const prisma = new PrismaClient();
 
@@ -38,4 +39,15 @@ async function loadMessage(currentUserId: string, receiverId: string) {
   });
 }
 
-export { saveMessage, loadMessage };
+const formatedMessages = (messages: Chats[]) => {
+  const formattedMessages = messages.map((message) => ({
+    ...message,
+    time: new Date(message.time),
+  }));
+  const sortedMessages = formattedMessages.sort(
+    (a: any, b: any) => a.time - b.time
+  );
+  return sortedMessages
+}
+
+export { saveMessage, loadMessage, formatedMessages };

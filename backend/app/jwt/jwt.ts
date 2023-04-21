@@ -37,4 +37,12 @@ function createAccessToken(user: newUser, res: Response) {
   });
 }
 
-export { createAccessToken, generateAccessToken };
+function jwtVerify(currentAccessToken: string){
+  var payload = jwt.verify(
+    currentAccessToken,
+    process.env.ACCESS_TOKEN_SECRET
+  );
+  return payload
+}
+
+export { createAccessToken, generateAccessToken, jwtVerify };
