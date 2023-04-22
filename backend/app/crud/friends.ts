@@ -61,11 +61,11 @@ async function setNotification(receiverId: string, userId: string) {
     where: { friendsId: receiverId },
   });
 
-  if (friend?.isSentMessage === true) return null;
+  // if (friend?.isSentMessage === true) return null;
   const notification = await prisma.friend.updateMany({
     where: { AND:  [
-      {friendsId: receiverId}, 
-      {userId: userId}
+      {friendsId: userId}, 
+      {userId: receiverId}
     ] },
     data: { isSentMessage: true },
   });
@@ -77,8 +77,18 @@ async function resetNotification(receiverId: string, userId: string){
   const friend = await prisma.friend.findUnique({
     where: { friendsId: userId },
   });
+  // if(friend?.isSentMessage === false) return null
   console.log(friend)
+  const resetNotification = await prisma.friend.updateMany({
+    where: { AND: [
+      {friendsId: receiverId},
+      {userId: userId}
+    ]},
+    data: { isSentMessage: false}
+  })
+  return resetNotification
 }
+
 
 
 export { addFriend, getFriends, removeFriend, setNotification, resetNotification };
