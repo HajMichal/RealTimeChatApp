@@ -12,21 +12,28 @@ import Drawer from "./components/Drawer";
 type ContextType = {
   handleReceiverId: (receiverId: number) => void;
   handleAllFriends: (friendsList: friend[]) => void;
+  socket: any
 };
 export const MyContext = React.createContext<ContextType>({
   handleReceiverId: () => {},
   handleAllFriends: () => {},
+  socket: ""
 });
 
 function App() {
   const [receiverId, setReceiverId] = useState<number | null>(null);
   const [friendsList, setFriendsList] = useState<friend[]>();
   const [currentChatFriend, setCurrentChatFriend] = useState<friend>();
+  const [socket, setSocket] = useState<string>()
 
   const { data, isError } = useQuery("user", getCurrentUserData, {
     retry: 2,
     retryDelay: 700,
   });
+
+  const handleSocket = (socketId: string) => {
+    setSocket(socketId)
+  }
 
   const handleReceiverId = (receiverId: number) => {
     setReceiverId(receiverId);
@@ -49,7 +56,7 @@ function App() {
       {isError ? <Alert /> : null}
 
       <div className="absolute top-10 left-5 z-40 tablet:hidden">
-        <MyContext.Provider value={{ handleReceiverId, handleAllFriends }}>
+        <MyContext.Provider value={{ handleReceiverId, handleAllFriends, socket }}>
           <Drawer />
         </MyContext.Provider>
       </div>
@@ -73,7 +80,7 @@ function App() {
               <LookForFriends mainUserId={data?.data.id} />
               
               <MyContext.Provider
-                value={{ handleReceiverId, handleAllFriends }}
+                value={{ handleReceiverId, handleAllFriends, socket }}
               >
                 <FriendsList />
               </MyContext.Provider>
@@ -86,6 +93,7 @@ function App() {
               _id={data?.data.id}
               receiverId={receiverId}
               chatFriend={currentChatFriend}
+              setSocket={handleSocket}
             />
           </div>
         </div>

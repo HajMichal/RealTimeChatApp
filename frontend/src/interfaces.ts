@@ -7,6 +7,7 @@ interface chatTypes {
   username: string;
   receiverId: number | null;
   chatFriend: friend | undefined | null;
+  setSocket: any
 }
 
 interface messageData {
@@ -44,6 +45,7 @@ interface friend {
   id: number;
   friendsId: number;
   userId: number;
+  isSentMessage: boolean
   friendsName: string;
 }
 interface friendProps {

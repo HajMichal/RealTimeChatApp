@@ -13,7 +13,7 @@ import { loadMessage } from "../api/getMessages";
 import { saveMessage } from "../api/saveMessage";
 import { formatTime } from "./formatTime";
 
-const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
+const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) => {
   const socket = useRef<Socket>();
   const queryClient = useQueryClient();
   const messagesEndRef = useRef(null);
@@ -28,7 +28,7 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
     enabled: receiverId !== undefined,
   });
 
-  const { mutate, isError, error } = useMutation(saveMessage, {
+  const { mutate, isError } = useMutation(saveMessage, {
     onSuccess() {
       queryClient.invalidateQueries("receiverId");
     },
@@ -36,6 +36,7 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
 
   useEffect(() => {
     socket.current = io("http://localhost:3000");
+    setSocket(socket.current)
   }, []);
 
   useEffect(() => {
@@ -48,7 +49,8 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
 
   useEffect(() => {
     if (!socket.current) return;
-    socket.current.on("getMessage", ({ messageData }) => {
+    socket.current.on("getMessage", ({ messageData, isSentData }) => {
+      // console.log(isSentData, messageData.userId)
       setArrivalMessage({
         message: messageData.message,
         userId: messageData.userId,
@@ -78,6 +80,15 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
     }
   }, [messageList]);
 
+
+  const handleNotification = () => {
+    if (!socket.current) return;
+    socket.current.emit("sendNotification", {
+      senderName: _id,
+      receiverId: receiverId
+    });
+  }
+
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
     if (data.message !== "" && socket.current) {
       const messageData = {
@@ -86,19 +97,18 @@ const Chat = ({ username, _id, receiverId, chatFriend }: chatTypes) => {
         time: new Date(Date.now()),
         receiverId: receiverId,
       };
-      if (isError) {
-        console.log(error);
-        return null;
-      } else {
+      if (isError) return null;
+
         socket.current.emit("sendMessage", {
           receiverId: receiverId,
           messageData,
           senderId: _id,
         });
         setMessageList((prev) => [...prev, messageData]);
+        handleNotification()
         mutate(messageData);
       }
-    }
+    
     reset();
   };
 
