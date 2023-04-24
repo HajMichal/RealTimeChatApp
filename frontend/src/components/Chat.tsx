@@ -39,6 +39,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
     setSocket(socket.current)
   }, []);
 
+  // Adding users to current Onnline list 
   useEffect(() => {
     if (!socket.current) return;
     socket.current.emit("addUser", _id);
@@ -47,6 +48,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
     });
   }, [username, _id]);
 
+  // Listening 
   useEffect(() => {
     if (!socket.current) return;
     socket.current.on("getMessage", ({ messageData, isSentData }) => {

@@ -15,7 +15,8 @@ function Friends({ friends }: friendProps) {
 const FriendView: React.FC<FriendViewProps> = (props) => {
   const [viewOptions, setViewOptions] = useState<boolean>(false);
   const [notification, setNotification] = useState(false)
-  const [sender, setSender] = useState<number>()
+  const [sender, setSender] = useState<number>(0)
+  const [onnlineStatus, setOnnlineStatus] = useState(false)
 
 
   // W tym miejscu queryClient pomaga w szybszym usunieciu z ekranu danego uzytkownika. Usuwa go odrazu
@@ -37,25 +38,26 @@ const FriendView: React.FC<FriendViewProps> = (props) => {
     mutate(props.data.id);
   };
 
-  // Setting notification when user is offline
-  useEffect(() => {
-    setNotification(props.data.isSentMessage)
-  }, [props, startChat])
-
   // Setting notification when user is onnline 
   useEffect(() => {
     if (!socket) return;
+    setOnnlineStatus(true)
     socket.on("getNotification", (data: any) => {
       setSender(data.senderName);
     });
   }, [socket])
 
+    // Setting notification when user is offline
+  useEffect(() => {
+    if(onnlineStatus) return
+    setNotification(props.data.isSentMessage)
+  }, [props, startChat, notification])
 
   return (
     <div
       className="card-body my-3 p-1 text-mid w-full duration-300 hover:cursor-pointer hover:shadow-md hover:shadow-darkblue"
       key={props.data.id}
-      onClick={() => setSender(0)}
+      onClick={() => {setNotification(false), setSender(0)}}
     >
       <div className="grid grid-cols-8 h-14 items-center gap-3 ml-4">
         <div className="avatar -my-4 col-span-2" onClick={startChat}>
