@@ -12,6 +12,9 @@ import getFriendsList from "./routers/getFriendsList";
 import removeFriend from "./routers/removeFriends";
 import postMessage from "./routers/postMessage";
 import loadMessage from "./routers/getMessages";
+import addToQueue from "./routers/addUserToQueue"
+import getQueue from "./routers/getFriendsQueue"
+import removeFromQueue from "./routers/removeFromQueue"
 
 import { sendMsg, users } from "./interfaces";
 
@@ -107,6 +110,9 @@ app.use("/", getFriendsList);
 app.use("/", removeFriend);
 app.use("/", postMessage);
 app.use("/", loadMessage);
+app.use("/", addToQueue);
+app.use("/", getQueue);
+app.use("/", removeFromQueue);
 
 server.listen(3000, () =>
   console.log(`

@@ -33,8 +33,7 @@ async function getAllUsers(searchedValue?: string) {
     },
     where: {
       name: {
-        contains: searchedValue,
-        mode: 'insensitive'
+        contains: searchedValue
       },
     },
   });

@@ -4,20 +4,20 @@ const prisma = new PrismaClient()
 
 async function main() {
 
-  const getUser = await prisma.chats.findMany({})
+  // const getUser = await prisma.chats.findMany({})
 
   
   // const existingFriend = getUser?.friends.find((friend)=>  friend.friendsId === 3 ? friend : null )
   // console.log(!!existingFriend)
 
-  console.log(getUser)
+  // console.log(getUser)
 
   // if (existingFriend) throw new Error("This Friend already exists in your friend list")
 
 
-  // const addNewFriend = await prisma.friend.deleteMany({
-  // })
-  // console.log(addNewFriend)
+  const addNewFriend = await prisma.friendRequestQueue.findMany({
+  })
+  console.log(addNewFriend)
 
 
   // const allUseres = await prisma.user.findMany({

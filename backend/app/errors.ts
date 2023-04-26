@@ -12,4 +12,11 @@ class TryingToAddYouselfError extends Error {
   }
 }
 
-export { FriendExistsError, TryingToAddYouselfError };
+class NotExistsError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "NotExistsError";
+  }
+}
+
+export { FriendExistsError, TryingToAddYouselfError, NotExistsError };

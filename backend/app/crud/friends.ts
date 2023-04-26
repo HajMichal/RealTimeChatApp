@@ -1,12 +1,12 @@
-import { FriendExistsError, TryingToAddYouselfError } from "../errors";
+import { FriendExistsError, NotExistsError, TryingToAddYouselfError } from "../errors";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function addFriend(
-  friendsId: string,
+  friendsId: number,
   friendsName: string,
-  mainUserId: string
+  mainUserId: number
 ) {
   const getUser = await prisma.user.findUnique({
     where: { id: mainUserId },
@@ -36,7 +36,7 @@ async function addFriend(
   return createUser;
 }
 
-async function getFriends(userId: string) {
+async function getFriends(userId: number) {
   const getUser = await prisma.user.findUnique({
     where: { id: userId },
     include: { friends: true },
@@ -44,19 +44,19 @@ async function getFriends(userId: string) {
   return getUser?.friends;
 }
 
-async function removeFriend(id: string) {
+async function removeFriend(id: number) {
   const friend = await prisma.friend.findUnique({
     where: { id: id },
     select: { userId: true },
   });
-  if (!friend) throw new Error("Friend not found");
+  if (!friend) throw new NotExistsError("Friend not found");
   const removedFriend = await prisma.friend.delete({
     where: { id: id },
   });
   return removedFriend;
 }
 
-async function setNotification(receiverId: string, userId: string) {
+async function setNotification(receiverId: number, userId: number) {
   const notification = await prisma.friend.updateMany({
     where: { AND:  [
       {friendsId: userId}, 
@@ -68,7 +68,7 @@ async function setNotification(receiverId: string, userId: string) {
 
 }
 
-async function resetNotification(receiverId: string, userId: string){
+async function resetNotification(receiverId: number, userId: number){
   const resetNotification = await prisma.friend.updateMany({
     where: { AND: [
       {friendsId: receiverId},
