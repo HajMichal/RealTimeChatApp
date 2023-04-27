@@ -33,8 +33,8 @@ const FriendView: React.FC<friendViewProps> = (props) => {
     handleReceiverId(props.data.friendsId);
   };
 
-  const removeFromFriends = () => {
-    mutate(props.data.id);
+  const removeFromFriends = (friendId: number) => {
+    mutate(friendId);
   };
 
   // Setting notification when user is onnline 
@@ -83,7 +83,7 @@ const FriendView: React.FC<friendViewProps> = (props) => {
           }`}
         >
           <label
-            onClick={removeFromFriends}
+            onClick={() => removeFromFriends(props.data.id)}
             className="text-red-600 w-full tablet:justify-end items-center flex hover:cursor-pointer"
           >
             {" "}

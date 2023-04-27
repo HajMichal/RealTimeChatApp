@@ -6,7 +6,9 @@ import { RxCross2 } from "react-icons/rx"
 import {
   queueProps,
   queueViewProps,
+  invitations_requests
 } from "../interfaces";
+import { addFriend } from "../api/addFriend";
 import { removeQueue } from "../api/removeInvitation";
 
 function Queue({ queue }: queueProps) {
@@ -26,24 +28,39 @@ function Queue({ queue }: queueProps) {
 
 const QueueView: React.FC<queueViewProps> = (props) => {
   const { _id } = useContext(MyContext)
-
-  // W tym miejscu queryClient pomaga w szybszym usunieciu z ekranu danego uzytkownika. Usuwa go odrazu
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(removeQueue, {
+
+  const { mutate: removeFromQueue } = useMutation(removeQueue, {
     onSuccess: () => {
       queryClient.invalidateQueries("friendQueue");
     },
   });
-  // const removeFromQueue = () => {
-  //   mutate(props.data.id);
-  // };
+  const { mutate: addFriendFromQueue } = useMutation(addFriend, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("friendList");
+    },
+  });
+  
 
-  const handleAcceptButton = () => {
 
+  const handleAcceptButton = (friendData: invitations_requests) => {
+    // adding friend to FRIEND friendList
+    addFriendFromQueue({
+      friendsId:friendData.userId,
+      friendsName: friendData.userName,
+      mainUserId: friendData.friendId 
+    })
+        // adding friend to USER friendList
+    addFriendFromQueue({
+      friendsId: friendData.friendId,
+      friendsName: friendData.friendName,
+      mainUserId: friendData.userId
+    })
+    removeFromQueue(friendData.id)
   }
 
-  const handleRejectButton = () => {
-
+  const handleRejectButton = (friendData: invitations_requests) => {
+    removeFromQueue(friendData.id);
   }
 
   return (
@@ -67,10 +84,10 @@ const QueueView: React.FC<queueViewProps> = (props) => {
         {_id === props.data.friendId 
           ?  
             <div className="flex col-start-6 gap-4 ml-2">
-              <button className="btn btn-sm btn-circle flex justify-self-end bg-green-500 hover:scale-125 hover:bg-green-400">
+              <button onClick={() => handleAcceptButton(props.data)} className="btn btn-sm btn-circle flex justify-self-end bg-green-500 hover:scale-125 hover:bg-green-400">
                   <BsCheck className="text-3xl text-dark" />
               </button>
-              <button className="btn btn-sm btn-circle bg-red-600 hover:scale-125 hover:bg-red-500">
+              <button onClick={() => handleRejectButton(props.data)} className="btn btn-sm btn-circle bg-red-600 hover:scale-125 hover:bg-red-500">
                 <RxCross2 className="text-2xl text-dark" />
               </button>
             </div>

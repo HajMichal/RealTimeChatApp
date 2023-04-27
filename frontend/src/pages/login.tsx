@@ -23,8 +23,7 @@ const login = () => {
   };
 
   const { mutate, isLoading, isError, error } = useMutation(postData, {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       navigate("/", { replace: true });
     },
   });

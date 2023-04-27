@@ -24,8 +24,7 @@ const register = () => {
   };
 
   const { mutate, isError, error, isLoading } = useMutation(createUser, {
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       navigate("/", { replace: true });
     },
   });
