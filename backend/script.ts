@@ -15,7 +15,7 @@ async function main() {
   // if (existingFriend) throw new Error("This Friend already exists in your friend list")
 
 
-  // const addNewFriend = await prisma.friendRequestQueue.deleteMany({
+  // const addNewFriend = await prisma.friend.deleteMany({
   // })
   // console.log(addNewFriend)
 

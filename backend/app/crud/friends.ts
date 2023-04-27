@@ -26,14 +26,15 @@ async function addFriend(
       "You can not add yourself to your friend's list"
     );
 
-  const createUser = await prisma.friend.create({
+  const createFriend = await prisma.friend.create({
     data: {
       friendsId: friendsId,
       friendsName: friendsName,
       user: { connect: { id: mainUserId } },
     },
   });
-  return createUser;
+
+  return createFriend;
 }
 
 async function getFriends(userId: number) {
