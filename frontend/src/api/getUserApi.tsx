@@ -18,12 +18,9 @@ interface getUser {
   exp: number;
 }
 
-const getCurrentUserData = async (data: getUser | any) => {
+export const getCurrentUserData = async (data: getUser | any) => {
   return await userApi.get("/user", { params: data });
 };
 
-const getUsers = async () => {
-  return await userApi.get("/allUsers?searchedValue=");
-};
 
-export default getCurrentUserData;
+

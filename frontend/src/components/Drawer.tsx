@@ -1,7 +1,7 @@
 import { BiMenu } from "react-icons/bi";
 import LookForFriends from "./LookForFriends";
 import { useQuery } from "react-query";
-import getCurrentUserData from "../api/getUserApi";
+import { getCurrentUserData } from "../api/getUserApi";
 import FriendsList from "./FriendsList";
 import "flowbite";
 
@@ -17,6 +17,7 @@ const Drawer = () => {
         <button
           className="text-white text-center bg-brand glass focus:ring-4 w-11 h-11 focus:ring-mid font-medium rounded-lg text-sm  my-2    focus:outline-none"
           type="button"
+          aria-label="options"
           data-drawer-target="drawer-left-example"
           data-drawer-show="drawer-left-example"
           data-drawer-placement="left"

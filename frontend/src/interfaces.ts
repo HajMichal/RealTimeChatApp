@@ -48,11 +48,32 @@ interface friend {
   isSentMessage: boolean
   friendsName: string;
 }
+
 interface friendProps {
-  friends: any;
+  friends: friend[]
 }
-interface FriendViewProps {
+interface queueData {
+  friendInvitations: invitations_requests[]
+  friendRequests: invitations_requests[]
+}
+interface queueProps {
+  queue: queueData
+}
+
+interface invitations_requests {
+  id: number;
+  date: Date;
+  friendId: number;
+  userId:number;
+  userName: string;
+  friendName: string;
+}
+
+interface friendViewProps {
   data: friend;
+}
+interface queueViewProps {
+  data: invitations_requests;
 }
 
 export type {
@@ -65,6 +86,10 @@ export type {
   userId,
   friend,
   friendProps,
-  FriendViewProps,
+  friendViewProps,
+  queueViewProps,
   sendMessage,
+  queueProps,
+  queueData,
+  invitations_requests
 };

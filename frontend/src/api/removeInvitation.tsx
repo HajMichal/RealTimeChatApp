@@ -8,12 +8,8 @@ const userApi = axios.create({
   withCredentials: true,
 });
 
-
-
-export const getAllUsers = async (value: string) => {
-  return await userApi.get(
-    `http://localhost:3000/allUsers?searchedValue=${value}`
-  );
+export const removeQueue = async (id: number) => {
+  return await userApi.delete(`http://localhost:3000/removeFromQueue/${id}`);
 };
 
 

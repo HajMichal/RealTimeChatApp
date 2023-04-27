@@ -14,8 +14,8 @@ interface addFriend {
   mainUserId: number;
 }
 
-const addFriend = async (data: addFriend) => {
+export const addFriend = async (data: addFriend) => {
   return await loginApi.post("/addFriend", data);
 };
 
-export default addFriend;
+

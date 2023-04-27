@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import getCurrentUserData from "./api/getUserApi";
+import { getCurrentUserData } from "./api/getUserApi";
 
 import Chat from "./components/Chat";
 import Alert from "./components/Alert";
-import LookForFriends from "./components/LookForFriends";
-import FriendsList from "./components/FriendsList";
-import { friend } from "./interfaces";
 import Drawer from "./components/Drawer";
+import FriendsList from "./components/FriendsList";
+import FriendsQueue from "./components/FriendsQueue";
+import LookForFriends from "./components/LookForFriends";
+import { friend } from "./interfaces";
 
 type ContextType = {
   handleReceiverId: (receiverId: number) => void;
   handleAllFriends: (friendsList: friend[]) => void;
-  socket: any
+  socket: any;
+  _id: number | null
 };
 export const MyContext = React.createContext<ContextType>({
   handleReceiverId: () => {},
   handleAllFriends: () => {},
-  socket: ""
+  socket: "",
+  _id: null
 });
 
 function App() {
@@ -30,7 +33,8 @@ function App() {
     retry: 2,
     retryDelay: 700,
   });
-
+  const _id = data?.data.id
+  
   const handleSocket = (socketId: string) => {
     setSocket(socketId)
   }
@@ -56,7 +60,7 @@ function App() {
       {isError ? <Alert /> : null}
 
       <div className="absolute top-10 left-5 z-40 tablet:hidden">
-        <MyContext.Provider value={{ handleReceiverId, handleAllFriends, socket }}>
+        <MyContext.Provider value={{ handleReceiverId, handleAllFriends, socket, _id }}>
           <Drawer />
         </MyContext.Provider>
       </div>
@@ -80,8 +84,9 @@ function App() {
               <LookForFriends mainUserId={data?.data.id} />
               
               <MyContext.Provider
-                value={{ handleReceiverId, handleAllFriends, socket }}
+                value={{ handleReceiverId, handleAllFriends, socket, _id }}
               >
+                <FriendsQueue />
                 <FriendsList />
               </MyContext.Provider>
             </div>

@@ -12,4 +12,4 @@ export const remover = async (id: number) => {
   return await userApi.delete(`http://localhost:3000/removeFriend/${id}`);
 };
 
-export default remover;
+

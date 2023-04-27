@@ -53,22 +53,27 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
     if (!socket.current) return;
     socket.current.on("getMessage", ({ messageData, isSentData }) => {
       // console.log(isSentData, messageData.userId)
-      setArrivalMessage({
+      const messageData_ = {
         message: messageData.message,
         userId: messageData.userId,
         time: messageData.time,
         receiverId: messageData.receiverId,
-      });
+      };
+
+      setArrivalMessage(messageData_)
+
     });
-  }, []);
+  }, [arrivalMessage]);
 
   useEffect(() => {
     if (isSuccess && receiverId !== null) {
       setMessageList(data.data);
     }
+
     if (arrivalMessage && chatFriend?.friendsId === arrivalMessage.userId) {
       setMessageList((prev) => [...prev, arrivalMessage]);
     }
+
   }, [chatFriend, isSuccess, arrivalMessage]);
 
   useEffect(() => {
@@ -130,15 +135,15 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
           <div className="w-full h-full " id="text-area">
             <ul>
               {receiverId === null ? (
-                <div className="flex chat m-5 mt-20 tablet:mt-5 tablet:mx-16 text-5xl tablet:text-7xl text-opacity-20 text-mid justify-center text-center">
+                <li className="flex chat m-5 mt-20 tablet:mt-5 tablet:mx-16 text-5xl tablet:text-7xl text-opacity-20 text-mid justify-center text-center">
                   <p>Open new chat</p>
                   <div className="self-center">
                     <BsFillChatDotsFill />
                   </div>
-                </div>
+                </li>
               ) : (
                 messageList.map((messageContent, index) => (
-                  <div
+                  <li
                     ref={messagesEndRef}
                     className={
                       _id === messageContent.userId
@@ -173,7 +178,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
                       Seen
                     </div> */}
                     <div />
-                  </div>
+                  </li>
                 ))
               )}
             </ul>
