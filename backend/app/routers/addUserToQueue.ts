@@ -6,9 +6,9 @@ import { FriendExistsError, TryingToAddYouselfError } from "../errors";
 const router = Router();
 
 router.post("/addToQueue", async (req, res) => {
-    const {userId, friendId} = req.body
+    const {userId, friendId, friendName} = req.body
     try {
-        const friendInQueue = await addFriendToQueue(userId, friendId)
+        const friendInQueue = await addFriendToQueue(userId, friendId, friendName)
         res.json({friendInQueue: friendInQueue}).status(200)
     } catch (error) {
         if (error instanceof FriendExistsError) {

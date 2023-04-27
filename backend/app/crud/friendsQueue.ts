@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function addFriendToQueue(userId: number, friendId: number) {
+async function addFriendToQueue(userId: number, friendId: number, friendName: string) {
     const getUser = await prisma.user.findUnique({
         where: { id: userId },
         include: { friendQueue: true },
@@ -24,20 +24,23 @@ async function addFriendToQueue(userId: number, friendId: number) {
     const friendInQueue = await prisma.friendRequestQueue.create({
         data: {
             friendId: friendId,
-            userId: userId
+            userId: userId,
+            friendName: friendName,
+            userName: getUser.name
         }
     })
     return friendInQueue
 }
 
 async function getQueue(userId: number) {
-    const friendRequests = await prisma.friendRequestQueue.findMany({
-        where: { userId: userId}
-    })
-    const friendInvitations = await prisma.friendRequestQueue.findMany({
-        where: {friendId: userId}
-    })
-    return {friendInvitations, friendRequests}
+  if(!userId) throw Error("Need userId")
+  const friendRequests = await prisma.friendRequestQueue.findMany({
+      where: { userId: userId}
+  })
+  const friendInvitations = await prisma.friendRequestQueue.findMany({
+      where: {friendId: userId}
+  })
+  return {friendInvitations, friendRequests}
 }
 
 async function removeFriendFromQueue(id: number) {

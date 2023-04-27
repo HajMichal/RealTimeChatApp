@@ -30,7 +30,7 @@ model Chats {
   time      String
   reciverId Int
   author    User   @relation(fields: [userId], references: [id])
-  userId    Int    
+  userId    Int
 
   @@index(userId)
 }
@@ -47,11 +47,13 @@ model Friend {
 }
 
 model FriendRequestQueue {
-  id       Int  @id @default(autoincrement()) @map("_id")
-  userId   Int  
-  friendId Int  
-  date     DateTime @default(now())
-  user     User @relation(fields: [userId], references: [id])
+  id         Int      @id @default(autoincrement()) @map("_id")
+  userId     Int
+  userName   String
+  friendId   Int
+  friendName String
+  date       DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
 
   @@index(userId)
 }
