@@ -20,7 +20,7 @@ The most original idea for project
 
 ## 📔 Development
 
-You have to make connection to mongoDB and create .env file with:
+You have to make connection to PlanetScale and create .env file with:
 * DATABASE_URL = "URL from PlanetScale"
 * ACCESS_TOKEN_SECRET = 'example token'
 * REFRESH_TOKEN_SECRET = 'example token'
