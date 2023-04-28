@@ -20,14 +20,13 @@ The most original idea for project
 
 ## 📔 Development
 
+```bash
+git clone https://github.com/MichalBrx/RealTimeChatApp.git
+```
 You have to make connection to PlanetScale and create .env file with:
 * DATABASE_URL = "URL from PlanetScale"
 * ACCESS_TOKEN_SECRET = 'example token'
 * REFRESH_TOKEN_SECRET = 'example token'
-
-```bash
-git clone https://github.com/MichalBrx/RealTimeChatApp.git
-```
 
 ```bash
 
