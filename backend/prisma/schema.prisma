@@ -14,13 +14,13 @@ datasource db {
 
 model User {
   id          Int                  @id @default(autoincrement()) @map("_id")
-  name        String
+  name        String               @db.VarChar(19)
   email       String               @unique
   password    String
   role        String               @default("USER")
   addThisUser String?
   messages    Chats[]
-  friends     Friend[]
+  friends     Friend[]             
   friendQueue FriendRequestQueue[]
 }
 
@@ -44,6 +44,7 @@ model Friend {
   userId        Int
 
   @@index(userId)
+
 }
 
 model FriendRequestQueue {

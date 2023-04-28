@@ -12,8 +12,12 @@ async function addFriend(
     where: { id: mainUserId },
     include: { friends: true },
   });
+  const allFriends = await prisma.friend.findMany({
+    where: {userId: mainUserId }
+  })
 
   if (!getUser) return;
+  if(allFriends.length > 10) throw new Error("Too much friends")
 
   const existingFriend = getUser?.friends.find((friend) =>
     friend.friendsId === friendsId ? friend : null
