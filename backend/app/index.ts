@@ -36,7 +36,7 @@ app.use(
   cors({
     credentials: true,
     optionsSuccesStatus: 200,
-    origin: ["http://localhost:5173", "http://localhost:5173/", "https://real-time-chat-app-lac.vercel.app/", "https://real-time-chat-app-michalbrx.vercel.app/", "https://real-time-chat-app-git-main-michalbrx.vercel.app/"],
+    origin: ["http://localhost:5173", "http://localhost:5173/", "https://real-time-chat-app-lac.vercel.app", "https://real-time-chat-app-michalbrx.vercel.app", "https://real-time-chat-app-git-main-michalbrx.vercel.app"],
     preflightContinue: false,
     methods: "GET, POST, PUT, PATCH, DELETE, OPTIONS",
     allowHeaders:
