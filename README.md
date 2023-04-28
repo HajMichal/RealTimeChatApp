@@ -50,8 +50,10 @@ npm run dev
 <br/>
 <br/>
 
+Check it out!
+
 <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.gif" alt="🌟" width="32" height="32">
 
 Leave a star if you like it 
 
-Check it out!
+
