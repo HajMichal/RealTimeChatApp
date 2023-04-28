@@ -20,14 +20,13 @@ The most original idea for project
 
 ## 📔 Development
 
-You have to make connection to mongoDB and create .env file with:
-* DATABASE_URL = "mongodb+srv://< username >:< password >@ChatApp.pjzssmc.mongodb.net/ChatApp?retryWrites=true&w=majority"
-* ACCESS_TOKEN_SECRET = 'example token'
-* REFRESH_TOKEN_SECRET = 'example token'
-
 ```bash
 git clone https://github.com/MichalBrx/RealTimeChatApp.git
 ```
+You have to make connection to PlanetScale and create .env file with:
+* DATABASE_URL = "URL from PlanetScale"
+* ACCESS_TOKEN_SECRET = 'example token'
+* REFRESH_TOKEN_SECRET = 'example token'
 
 ```bash
 
@@ -50,8 +49,10 @@ npm run dev
 <br/>
 <br/>
 
+Check it out!
+
 <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f31f/512.gif" alt="🌟" width="32" height="32">
 
 Leave a star if you like it 
 
-Check it out!
+
