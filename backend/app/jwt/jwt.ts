@@ -27,7 +27,7 @@ function createAccessToken(user: newUser, res: Response) {
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: "none",
     secure: true,
   });
   res.json({
