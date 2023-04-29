@@ -52,7 +52,8 @@ const io = new Server(server, {
 });
 
 app.get("/", (req: Request, res: Response) => {
-  res.sendFile(__dirname + "/index.html");
+  // res.sendFile(__dirname + "/index.html");
+  res.send("Weloce to the server home page")
 });
 
 let users: Array<users> = [];

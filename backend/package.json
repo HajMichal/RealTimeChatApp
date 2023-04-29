@@ -12,7 +12,7 @@
   },
   "name": "backend",
   "version": "1.0.0",
-  "main": "app/index.ts",
+  "main": "index.ts",
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
