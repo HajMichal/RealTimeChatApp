@@ -23,7 +23,7 @@ The most original idea for project
 ```bash
 git clone https://github.com/MichalBrx/RealTimeChatApp.git
 ```
-You have to make connection to PlanetScale and create .env file with:
+You have to add those variables during deployment in Railway.
 * DATABASE_URL = "URL from PlanetScale"
 * ACCESS_TOKEN_SECRET = 'example token'
 * REFRESH_TOKEN_SECRET = 'example token'
