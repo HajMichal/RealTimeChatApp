@@ -51,8 +51,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
   // Listening 
   useEffect(() => {
     if (!socket.current) return;
-    socket.current.on("getMessage", ({ messageData, isSentData }) => {
-      // console.log(isSentData, messageData.userId)
+    socket.current.on("getMessage", ({ messageData }) => {
       const messageData_ = {
         message: messageData.message,
         userId: messageData.userId,
