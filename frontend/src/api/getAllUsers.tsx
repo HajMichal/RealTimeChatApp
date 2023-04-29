@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const userApi = axios.create({
-  baseURL: "http://localhost:3000" || "https://realtimechatapp-production-9eac.up.railway.app",
+  baseURL: "https://realtimechatapp-production-9eac.up.railway.app",
   headers: {
     "Content-Type": "text/plain",
   },
