@@ -23,12 +23,12 @@ function createAccessToken(user: newUser, res: Response) {
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
     sameSite: "none",
-    secure: false,
+    secure: true,
   });
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    sameSite: "strict",
+    secure: true,
   });
   res.json({
     user: user,
