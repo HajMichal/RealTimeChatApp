@@ -12,7 +12,6 @@ router.post("/login", async (req, res) => {
     const user = await checkLogin(email, password);
     createAccessToken(user, res);
   } catch (err) {
-    console.log((err as Error)?.message);
     if ((err as Error)?.message === "Invalid E-mail") {
       res.status(401).json({ message: "Invalid E-mail" });
     } else if ((err as Error)?.message === "Invalid Password") {

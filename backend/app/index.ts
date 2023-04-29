@@ -36,7 +36,7 @@ app.use(
   cors({
     credentials: true,
     optionsSuccesStatus: 200,
-    origin: ["https://real-time-chat-app-lac.vercel.app", "https://real-time-chat-app-lac.vercel.app/", "https://real-time-chat-app-michalbrx.vercel.app", "https://real-time-chat-app-git-main-michalbrx.vercel.app"],
+    origin: ["https://real-time-chat-app-lac.vercel.app", "https://real-time-chat-app-michalbrx.vercel.app", "https://real-time-chat-app-git-main-michalbrx.vercel.app"],
     preflightContinue: false,
     methods: "GET, POST, PUT, PATCH, DELETE",
     allowHeaders:
@@ -52,8 +52,7 @@ const io = new Server(server, {
 });
 
 app.get("/", (req: Request, res: Response) => {
-  // res.sendFile(__dirname + "/index.html");
-  res.send("Weloce to the server home page")
+  res.sendFile(__dirname + "/index.html");
 });
 
 let users: Array<users> = [];
