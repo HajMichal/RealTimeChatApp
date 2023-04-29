@@ -115,7 +115,7 @@ app.use("/", addToQueue);
 app.use("/", getQueue);
 app.use("/", removeFromQueue);
 
-server.listen(3000, () =>
+server.listen(3000, '0.0.0.0', () =>
   console.log(`
 🚀 Server ready at: http://localhost:3000
 ⭐️ See sample requests: http://pris.ly/e/ts/rest-express#3-using-the-rest-api`)
