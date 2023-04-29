@@ -14,7 +14,7 @@ async function addFriendToQueue(userId: number, friendId: number, friendName: st
     })
   
     if (!getUser) return;
-    if(allFriends.length > 10) throw new Error("Too much friends")
+    if(allFriends.length > 10) throw new Error("Too many friends")
     
     const existingFriend = getUser?.friendQueue.find((friend) =>
     friend.friendId === friendId ? friend : null

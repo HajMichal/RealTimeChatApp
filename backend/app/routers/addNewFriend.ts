@@ -4,10 +4,12 @@ import { FriendExistsError, TryingToAddYouselfError } from '../errors';
 
 const router = Router()
 
+
+
 router.post('/addFriend', async (req, res) => {
-    const {friendsId, friendsName, mainUserId } = req.body;
+    const {friendId, friendName, userId } = req.body;
     try {
-        const newFriend = await addFriend(friendsId, friendsName, mainUserId)
+        const newFriend = await addFriend(friendId, friendName, userId)
         res.json({newFriend: newFriend})
     } catch (error) {
         if (error instanceof FriendExistsError) {
