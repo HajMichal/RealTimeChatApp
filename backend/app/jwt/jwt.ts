@@ -22,7 +22,7 @@ function createAccessToken(user: newUser, res: Response) {
 
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
     secure: false,
   });
   res.cookie("refreshToken", refreshToken, {
