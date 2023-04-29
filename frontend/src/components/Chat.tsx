@@ -35,7 +35,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
   });
 
   useEffect(() => {
-    socket.current = io("http://localhost:3000");
+    socket.current = io("https://realtimechatapp-production-9eac.up.railway.app");
     setSocket(socket.current)
   }, []);
 
