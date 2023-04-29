@@ -1,12 +1,5 @@
-import axios from "axios";
+import { axiosCreate } from "./axiosCreate"; 
 
-const loginApi = axios.create({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
 
 interface loginUser {
   email: string;
@@ -19,9 +12,9 @@ interface createUser {
 }
 
 export const postData = async (data: loginUser) => {
-  return await loginApi.post("/login", data);
+  return await axiosCreate.post("/login", data);
 };
 
 export const createUser = async (data: createUser) => {
-  return await loginApi.post("/register", data);
+  return await axiosCreate.post("/register", data);
 };

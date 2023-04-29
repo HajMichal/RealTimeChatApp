@@ -1,18 +1,16 @@
 import axios from "axios";
 
 const userApi = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:3000" || "https://realtimechatapp-production-9eac.up.railway.app",
   headers: {
     "Content-Type": "text/plain",
   },
   withCredentials: true,
 });
 
-
-
 export const getAllUsers = async (value: string) => {
   return await userApi.get(
-    `http://localhost:3000/allUsers?searchedValue=${value}`
+    `/allUsers?searchedValue=${value}`
   );
 };
 

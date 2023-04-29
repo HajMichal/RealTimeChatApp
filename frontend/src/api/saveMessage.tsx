@@ -1,14 +1,12 @@
-import axios from "axios";
-import { sendMessage } from "../interfaces";
+import { axiosCreate } from "./axiosCreate"; 
 
-const loginApi = axios.create({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
+interface sendMessage {
+  message: string;
+  time: Date;
+  userId: number;
+  receiverId: number | null;
+}
 
 export const saveMessage = async (data: sendMessage) => {
-  return await loginApi.post("/sendMessage", data);
+  return await axiosCreate.post("/sendMessage", data);
 };

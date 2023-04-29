@@ -1,12 +1,5 @@
-import axios from "axios";
+import { axiosCreate } from "./axiosCreate"; 
 
-const userApi = axios.create({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
 
 interface getUser {
   id: number;
@@ -19,7 +12,7 @@ interface getUser {
 }
 
 export const getCurrentUserData = async (data: getUser | any) => {
-  return await userApi.get("/user", { params: data });
+  return await axiosCreate.get("/user", { params: data });
 };
 
 

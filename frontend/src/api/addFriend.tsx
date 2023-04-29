@@ -1,12 +1,4 @@
-import axios from "axios";
-
-const loginApi = axios.create({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
+import { axiosCreate } from "./axiosCreate";
 
 interface addFriend {
   friendsName: string;
@@ -15,7 +7,7 @@ interface addFriend {
 }
 
 export const addFriend = async (data: addFriend) => {
-  return await loginApi.post("/addFriend", data);
+  return await axiosCreate.post("/addFriend", data);
 };
 
 

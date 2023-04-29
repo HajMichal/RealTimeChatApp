@@ -1,13 +1,6 @@
-import axios from "axios";
+import { axiosCreate } from "./axiosCreate"; 
 
-const userApi = axios.create({
-  baseURL: "http://localhost:3000",
-  headers: {
-    "Content-Type": "text/plain",
-  },
-  withCredentials: true,
-});
 
 export const getFriendList = async () => {
-  return await userApi.get("/friendList");
+  return await axiosCreate.get("/friendList");
 };

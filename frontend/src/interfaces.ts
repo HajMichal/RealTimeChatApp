@@ -7,7 +7,7 @@ interface chatTypes {
   username: string;
   receiverId: number | null;
   chatFriend: friend | undefined | null;
-  setSocket: any
+  setSocket: any;
 }
 
 interface messageData {
@@ -45,26 +45,26 @@ interface friend {
   id: number;
   friendsId: number;
   userId: number;
-  isSentMessage: boolean
+  isSentMessage: boolean;
   friendsName: string;
 }
 
 interface friendProps {
-  friends: friend[]
+  friends: friend[];
 }
 interface queueData {
-  friendInvitations: invitations_requests[]
-  friendRequests: invitations_requests[]
+  friendInvitations: invitations_requests[];
+  friendRequests: invitations_requests[];
 }
 interface queueProps {
-  queue: queueData
+  queue: queueData;
 }
 
 interface invitations_requests {
   id: number;
   date: Date;
   friendId: number;
-  userId:number;
+  userId: number;
   userName: string;
   friendName: string;
 }
@@ -91,5 +91,5 @@ export type {
   sendMessage,
   queueProps,
   queueData,
-  invitations_requests
+  invitations_requests,
 };
