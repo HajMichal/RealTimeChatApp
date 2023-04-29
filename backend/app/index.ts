@@ -38,7 +38,7 @@ app.use(
     optionsSuccesStatus: 200,
     origin: ["https://real-time-chat-app-lac.vercel.app", "https://real-time-chat-app-lac.vercel.app/", "https://real-time-chat-app-michalbrx.vercel.app", "https://real-time-chat-app-git-main-michalbrx.vercel.app"],
     preflightContinue: false,
-    methods: "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+    methods: "GET, POST, PUT, PATCH, DELETE",
     allowHeaders:
       "Origin, X-Requested-With, Content-Type, Accept, Authorization",
   })
