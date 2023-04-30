@@ -35,7 +35,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
   });
 
   useEffect(() => {
-    socket.current = io("https://realtimechatapp-production-9eac.up.railway.app");
+    socket.current = io(import.meta.env.VITE_BACKEND_URL);
     setSocket(socket.current)
   }, []);
 

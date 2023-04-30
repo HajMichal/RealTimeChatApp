@@ -7,6 +7,7 @@ interface addFriend {
 }
 
 export const addFriend = async (data: addFriend) => {
+  console.log(data)
   return await axiosCreate.post("/addFriend", data);
 };
 

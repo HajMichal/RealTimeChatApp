@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const userApi = axios.create({
-  baseURL: "https://realtimechatapp-production-9eac.up.railway.app",
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   headers: {
     "Content-Type": "text/plain",
   },
