@@ -37,7 +37,7 @@ model Chats {
 
 model Friend {
   id            Int     @id @default(autoincrement()) @map("_id")
-  friendsId     Int     @unique
+  friendsId     Int     
   friendsName   String
   isSentMessage Boolean @default(false)
   user          User    @relation(fields: [userId], references: [id])

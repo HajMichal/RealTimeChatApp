@@ -36,7 +36,7 @@ app.use(
   cors({
     credentials: true,
     optionsSuccesStatus: 200,
-    origin: ["https://real-time-chat-app-lac.vercel.app", "https://real-time-chat-app-michalbrx.vercel.app", "https://real-time-chat-app-git-main-michalbrx.vercel.app"],
+    origin: [process.env.CLIENT_URL],
     preflightContinue: false,
     methods: "GET, POST, PUT, PATCH, DELETE",
     allowHeaders:
@@ -46,7 +46,7 @@ app.use(
 
 const io = new Server(server, {
   cors: {
-    origin: ["https://real-time-chat-app-lac.vercel.app", "https://real-time-chat-app-michalbrx.vercel.app", "https://real-time-chat-app-michalbrx.vercel.app", "https://real-time-chat-app-git-main-michalbrx.vercel.app"],
+    origin: [ process.env.CLIENT_URL as string ],
     methods: "GET, POST",
   },
 });
