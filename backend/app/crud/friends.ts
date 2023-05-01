@@ -4,7 +4,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function addFriend(
-  friendsId: number,
+  friendId: number,
   friendsName: string,
   mainUserId: number
 ) {
@@ -20,9 +20,9 @@ async function addFriend(
   if(allFriends.length > 10) throw new Error("Too much friends")
 
   const existingFriend = getUser?.friends.find((friend) =>
-    friend.friendsId === friendsId ? friend : null
+    friend.friendsId === friendId ? friend : null
   );
-  const thisUser = getUser.id === friendsId ? true : false;
+  const thisUser = getUser.id === friendId ? true : false;
   if (!!existingFriend)
     throw new FriendExistsError("This user is already in your friend's list");
   if (thisUser)
@@ -32,7 +32,7 @@ async function addFriend(
 
   const createFriend = await prisma.friend.create({
     data: {
-      friendsId: friendsId,
+      friendsId: friendId,
       friendsName: friendsName,
       user: { connect: { id: mainUserId } },
     },

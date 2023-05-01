@@ -6,21 +6,24 @@ const prisma = new PrismaClient();
 async function addFriendToQueue(userId: number, friendId: number, friendName: string) {
     const getUser = await prisma.user.findUnique({
         where: { id: userId },
-        include: { friendQueue: true },
+        include: { friendQueue: true, friends: true },
       });
 
-    const allFriends = await prisma.friend.findMany({
+    const friendCount = await prisma.friend.count({
       where: {userId: userId }
     })
   
     if (!getUser) return;
-    if(allFriends.length > 10) throw new Error("Too many friends")
+    if(friendCount > 10) throw new Error("Too many friends")
     
     const existingFriend = getUser?.friendQueue.find((friend) =>
     friend.friendId === friendId ? friend : null
   );
+    const existingFriendInFriendList = getUser?.friends.find((friend) =>
+    friend.friendsId === friendId ? friend : null
+  );
 
-  if (!!existingFriend)
+  if (!!existingFriend || !!existingFriendInFriendList)
     throw new FriendExistsError("This user is already in your friend's list");
   if (getUser.id === friendId)
     throw new TryingToAddYouselfError(
