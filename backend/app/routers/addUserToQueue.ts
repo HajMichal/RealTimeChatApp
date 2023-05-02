@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { jwtVerify } from "../jwt/jwt";
 import { addFriendToQueue } from "../crud/friendsQueue";
 import { FriendExistsError, TryingToAddYouselfError } from "../errors";
 
@@ -6,7 +7,9 @@ import { FriendExistsError, TryingToAddYouselfError } from "../errors";
 const router = Router();
 
 router.post("/addToQueue", async (req, res) => {
-    const {userId, friendId, friendName} = req.body
+    const {friendId, friendName} = req.body
+    const accessToken = req.cookies.accessToken
+    const userId = jwtVerify(accessToken).id
     try {
         const friendInQueue = await addFriendToQueue(userId, friendId, friendName)
         res.json({friendInQueue: friendInQueue}).status(200)
@@ -15,7 +18,8 @@ router.post("/addToQueue", async (req, res) => {
             res.status(409).send({message: error.message})
         } else if (error instanceof TryingToAddYouselfError) {
             res.status(403).send({message: error.message})
-        } else {
+        }
+         else {
             res.sendStatus(500)
         }
     }

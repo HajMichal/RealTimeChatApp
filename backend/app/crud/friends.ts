@@ -3,29 +3,25 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-async function addFriend(
-  friendId: number,
-  friendsName: string,
-  mainUserId: number
-) {
+async function addFriend(friendId: number, friendsName: string, userId: number) {
   const getUser = await prisma.user.findUnique({
-    where: { id: mainUserId },
+    where: { id: userId },
     include: { friends: true },
   });
-  const allFriends = await prisma.friend.findMany({
-    where: {userId: mainUserId }
+  const friendCount = await prisma.friend.count({
+    where: {userId: userId }
   })
 
   if (!getUser) return;
-  if(allFriends.length > 10) throw new Error("Too much friends")
+  if(friendCount > 10) throw new Error("Too much friends")
 
   const existingFriend = getUser?.friends.find((friend) =>
     friend.friendsId === friendId ? friend : null
   );
-  const thisUser = getUser.id === friendId ? true : false;
+  
   if (!!existingFriend)
     throw new FriendExistsError("This user is already in your friend's list");
-  if (thisUser)
+  if (getUser.id === friendId)
     throw new TryingToAddYouselfError(
       "You can not add yourself to your friend's list"
     );
@@ -34,7 +30,7 @@ async function addFriend(
     data: {
       friendsId: friendId,
       friendsName: friendsName,
-      user: { connect: { id: mainUserId } },
+      user: { connect: { id: userId } },
     },
   });
 
