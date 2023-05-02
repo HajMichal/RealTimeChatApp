@@ -43,7 +43,7 @@ const LookForFriends = (mainUserId: userId) => {
 
   return (
     <div className="flex flex-wrap justify-center">
-            {err 
+        {err 
         ? <div className="alert alert-error shadow-lg absolute z-50 top-5 left-0">
             <div className="flex justify-center w-full">
               {/* @ts-ignore */}
