@@ -52,12 +52,8 @@ async function getQueue(userId: number) {
       }
   })
   const friendInvitations = await prisma.friendRequestQueue.findMany({
-      where: {friendId: userId},
-      select: {
-        id: true,
-        friendId: true,
-        friendName: true
-      }
+      where: {friendId: userId}
+      
   })
   return {friendInvitations, friendRequests}
 }
