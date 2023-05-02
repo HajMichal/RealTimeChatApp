@@ -3,7 +3,7 @@ import { axiosCreate } from "./axiosCreate";
 interface addFriend {
   friendsName: string;
   friendsId: number;
-  mainUserId: number;
+  userId: number;
 }
 
 export const addFriend = async (data: addFriend) => {

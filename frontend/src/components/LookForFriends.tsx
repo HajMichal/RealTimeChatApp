@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useDebounce } from "../hooks/useDebounce";
 import { getAllUsers } from "../api/getAllUsers";
@@ -9,6 +10,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import { FcPlus } from "react-icons/fc";
 
 const LookForFriends = (mainUserId: userId) => {
+  const [err, setIsError] = useState(false)
   const { register, watch, setValue } = useForm();
   const debounceSearchedTerm = useDebounce(watch("searchedValue"), 500);
 
@@ -20,11 +22,15 @@ const LookForFriends = (mainUserId: userId) => {
   });
 
   const queryClient = useQueryClient();
-  const { mutate, isError } = useMutation(addToQueue, {
+  const { mutate, isError, error } = useMutation(addToQueue, {
     onSuccess: () => {
       queryClient.invalidateQueries("friendQueue");
     },
   });
+
+  useEffect(() => {
+    setIsError(isError)
+  }, [error])
 
   const handleAddFriendToQueue = (clickedFriendId: number, mainUserId: number, clickedFriendName: string) => {
     const newFriendData = {
@@ -37,6 +43,15 @@ const LookForFriends = (mainUserId: userId) => {
 
   return (
     <div className="flex flex-wrap justify-center">
+            {err 
+        ? <div className="alert alert-error shadow-lg absolute z-50 top-5 left-0">
+            <div className="flex justify-center w-full">
+              {/* @ts-ignore */}
+              <span>{error?.response.data.message}</span>
+              <svg onClick={() => setIsError(false)} xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-10 w-10 cursor-pointer -my-5 ml-5 " fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+          </div>
+        :null}
       <form className="w-full mx-4 mb-3">
         <div className="relative flex items-center">
           <BiSearchAlt className="absolute w-5 h-5 ml-3 " />

@@ -1,8 +1,9 @@
 import { BiMenu } from "react-icons/bi";
-import LookForFriends from "./LookForFriends";
 import { useQuery } from "react-query";
-import { getCurrentUserData } from "../api/getUserApi";
 import FriendsList from "./FriendsList";
+import FriendsQueue from "./FriendsQueue";
+import LookForFriends from "./LookForFriends";
+import { getCurrentUserData } from "../api/getUserApi";
 import "flowbite";
 
 const Drawer = () => {
@@ -45,7 +46,7 @@ const Drawer = () => {
         </div>
         <div className="w-full mt-5">
           <LookForFriends mainUserId={data?.data.id} />
-
+          <FriendsQueue />
           <FriendsList />
         </div>
       </div>

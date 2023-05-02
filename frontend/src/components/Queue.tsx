@@ -35,7 +35,7 @@ const QueueView: React.FC<queueViewProps> = (props) => {
       queryClient.invalidateQueries("friendQueue");
     },
   });
-  const { mutate: addFriendFromQueue } = useMutation(addFriend, {
+  const { mutate: addFriendFromQueue, error } = useMutation(addFriend, {
     onSuccess: () => {
       queryClient.invalidateQueries("friendList");
     },
@@ -48,13 +48,13 @@ const QueueView: React.FC<queueViewProps> = (props) => {
     addFriendFromQueue({
       friendsId:friendData.userId,
       friendsName: friendData.userName,
-      mainUserId: friendData.friendId 
+      userId: friendData.friendId 
     })
         // adding friend to USER friendList
     addFriendFromQueue({
       friendsId: friendData.friendId,
       friendsName: friendData.friendName,
-      mainUserId: friendData.userId
+      userId: friendData.userId
     })
     removeFromQueue(friendData.id)
   }
@@ -68,6 +68,14 @@ const QueueView: React.FC<queueViewProps> = (props) => {
       className="card-body my-2 p-1 text-mid overflow-hidden w-full duration-300 hover:cursor-pointer hover:shadow-md hover:shadow-darkblue"
       key={props.data.id}
     >
+      {/* {error 
+        ? <div className="alert alert-error shadow-lg absolute z-50">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>{error.response.data.message}</span>
+            </div>
+          </div>
+        :null} */}
       <div className="grid grid-cols-8 h-14 items-center gap-3 ml-4">
         <div className="avatar -my-4 col-span-2">
           <div className="w-12 rounded-full">
@@ -83,12 +91,12 @@ const QueueView: React.FC<queueViewProps> = (props) => {
         </button>
         {_id === props.data.friendId 
           ?  
-            <div className="flex col-start-6 gap-4 ml-2">
-              <button onClick={() => handleAcceptButton(props.data)} className="btn btn-sm btn-circle flex justify-self-end bg-green-500 hover:scale-125 hover:bg-green-400">
-                  <BsCheck className="text-3xl text-dark" />
+            <div className="flex col-start-6  gap-2 laptop:gap-4 ml-2">
+              <button onClick={() => handleAcceptButton(props.data)} className="btn btn-xs laptop:btn-sm btn-circle flex justify-self-end items-center bg-green-500 hover:scale-125 hover:bg-green-400">
+                  <BsCheck className="text-2xl laptop:text-3xl text-dark" />
               </button>
-              <button onClick={() => handleRejectButton(props.data)} className="btn btn-sm btn-circle bg-red-600 hover:scale-125 hover:bg-red-500">
-                <RxCross2 className="text-2xl text-dark" />
+              <button onClick={() => handleRejectButton(props.data)} className="btn btn-xs laptop:btn-sm btn-circle bg-red-600 hover:scale-125 hover:bg-red-500">
+                <RxCross2 className="text-lg laptop:text-2xl text-dark" />
               </button>
             </div>
           : 
