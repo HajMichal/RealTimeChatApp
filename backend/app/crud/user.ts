@@ -36,6 +36,7 @@ async function getAllUsers(searchedValue?: string) {
         contains: searchedValue
       },
     },
+    take: 4
   });
   return users;
 }

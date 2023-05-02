@@ -7,6 +7,7 @@ const router = Router()
 
 router.post('/addFriend', async (req, res) => {
     const {friendsId, friendsName, userId } = req.body;
+    console.log(req.body)
     try {
         await addFriend(friendsId, friendsName, userId)
         res.sendStatus(200)

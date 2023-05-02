@@ -44,7 +44,6 @@ model Friend {
   userId        Int
 
   @@index(userId)
-
 }
 
 model FriendRequestQueue {

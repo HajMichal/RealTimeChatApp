@@ -8,16 +8,14 @@ async function addFriend(friendId: number, friendsName: string, userId: number) 
     where: { id: userId },
     include: { friends: true },
   });
-  const friendCount = await prisma.friend.count({
-    where: {userId: userId }
-  })
 
   if (!getUser) return;
-  if(friendCount > 10) throw new Error("Too much friends")
+  if(getUser.friends.length > 10) throw new Error("Too much friends")
 
-  const existingFriend = getUser?.friends.find((friend) =>
-    friend.friendsId === friendId ? friend : null
-  );
+  const existingFriend = await prisma.friend.findFirst({
+    where: { userId: userId, friendsId: friendId },
+    select: { friendsId: true }
+  });
   
   if (!!existingFriend)
     throw new FriendExistsError("This user is already in your friend's list");
@@ -59,25 +57,24 @@ async function removeFriend(id: number) {
 
 async function setNotification(receiverId: number, userId: number) {
   const notification = await prisma.friend.updateMany({
-    where: { AND:  [
-      {friendsId: userId}, 
-      {userId: receiverId}
-    ] },
+    where: {
+      friendsId: userId, 
+      userId: receiverId,
+    },
     data: { isSentMessage: true },
   });
   return notification;
-
 }
 
 async function resetNotification(receiverId: number, userId: number){
   const resetNotification = await prisma.friend.updateMany({
-    where: { AND: [
-      {friendsId: receiverId},
-      {userId: userId}
-    ]},
-    data: { isSentMessage: false}
-  })
-  return resetNotification
+    where: {
+      friendsId: receiverId,
+      userId: userId,
+    },
+    data: { isSentMessage: false }
+  });
+  return resetNotification;
 }
 
 
