@@ -105,10 +105,10 @@ const QueueView: React.FC<queueViewProps> = (props) => {
               </button>
             </div>
           : 
-            <div className="col-start-6 flex flex-wrap justify-center ml-8">
+            <div className="col-start-6 flex flex-wrap laptop:flex-nowrap justify-center ml-8 laptop:ml-10 desktop:ml-14 items-center ">
               <p className="opacity-40">Pending...</p>
-              <p className="m-1 ">
-              <button onClick={() => handleRejectButton(props.data)}><RxCross2  className="text-lg laptop:text-2xl text-light hover:text-red-600 hover:scale-150 duration-200" /></button>
+              <p className="m-1 items-center flex laptop:mt-2">
+                <button aria-label="Cancel" onClick={() => handleRejectButton(props.data)}><RxCross2  className="text-lg laptop:text-2xl text-light hover:text-red-600 hover:scale-150 duration-200" /></button>
               </p>
             </div>
         }
