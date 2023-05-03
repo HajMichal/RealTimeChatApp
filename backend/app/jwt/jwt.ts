@@ -30,11 +30,7 @@ function createAccessToken(user: newUser, res: Response) {
     sameSite: "none",
     secure: true,
   });
-  res.json({
-    user: user,
-    accessToken: accessToken,
-    refreshToken: refreshToken,
-  });
+  res.sendStatus(200)
 }
 
 function jwtVerify(currentAccessToken: string){
