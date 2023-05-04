@@ -1,8 +1,10 @@
 import { PrismaClient } from "@prisma/client";
+import prisma from "./prisma";
+
 
 const bcrypt = require("bcrypt");
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 async function get_user_by_email(user_email: string) {
   const user = await prisma.user.findFirst({ where: { email: user_email } });

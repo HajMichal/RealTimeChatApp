@@ -5,7 +5,10 @@ import { getTimeDiffInMs } from '../testingFile';
 
 import { getUserById } from "./user";
 
-const prisma = new PrismaClient();
+import prisma from "./prisma";
+
+
+// const prisma = new PrismaClient();
 
 async function createFriend(friendsId: number, friendsName: string, userId: number){
   return await prisma.friend.create({
@@ -34,7 +37,7 @@ async function addFriend(friendId: number, friendsName: string, userId: number, 
   console.log(getTimeDiffInMs(time, Date.now()), "test4 afterFirstChecks addFriendCrud")
 
   const existingFriendInFriendList = getUser?.friends.find(
-    (friend) => friend.friendsId === friendId);
+    (friend: any) => friend.friendsId === friendId);
   
   if (!!existingFriendInFriendList)
     throw new FriendExistsError("This user is already in your friend's list");

@@ -6,8 +6,9 @@ import {
 import { PrismaClient } from "@prisma/client";
 import { getUserById } from "./user";
 import { getTimeDiffInMs } from "../testingFile";
+import prisma from "./prisma";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 async function createAddFriendToQueue(friendId: number, userId: number, friendName: string, userName: string){
   return await prisma.friendRequestQueue.create({
@@ -37,9 +38,9 @@ async function addFriendToQueue(userId: number,friendId: number,friendName: stri
   console.log(getTimeDiffInMs(time, Date.now()), "test2 afterFirstChecks addfriendtoqueue")
 
   const existingFriendInQueue = getUser?.friendQueue.find(
-    (friend) => friend.friendId === friendId);
+    (friend: any) => friend.friendId === friendId);
   const existingFriendInFriendList = getUser?.friends.find(
-    (friend) => friend.friendsId === friendId);
+    (friend: any) => friend.friendsId === friendId);
 
     // do wywalenia
   console.log(getTimeDiffInMs(time, Date.now()), "test3 afterSecondChecks addfriendtoqueue")

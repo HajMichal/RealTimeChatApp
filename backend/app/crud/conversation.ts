@@ -1,7 +1,7 @@
 import { Chats, PrismaClient } from "@prisma/client";
+import prisma from "./prisma";
 
-
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 async function saveMessage(
   message: string,
