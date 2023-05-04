@@ -10,6 +10,13 @@ async function get_user_by_email(user_email: string) {
   return user;
 }
 
+async function getUserById(userId: number) {
+  return await prisma.user.findUnique({
+    where: { id: userId },
+    select: { id: true, name: true, friendQueue: { select: { friendId: true } }, friends: { select: { friendsId: true } } },
+  });
+}
+
 async function checkLogin(email: string, password: string) {
   const user = await get_user_by_email(email);
   if (user) {
@@ -41,4 +48,4 @@ async function getAllUsers(searchedValue?: string) {
   return users;
 }
 
-export { get_user_by_email, checkLogin, getAllUsers };
+export { get_user_by_email, getUserById, checkLogin, getAllUsers };
