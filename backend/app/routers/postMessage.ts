@@ -12,7 +12,6 @@ router.post("/sendMessage", async (req, res) => {
     await setNotification(receiverId, userId)
     res.sendStatus(200);
   } catch (error) {
-    console.log(error);
     res.send(error).status(500);
   }
 });

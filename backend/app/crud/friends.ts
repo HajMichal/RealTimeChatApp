@@ -1,16 +1,22 @@
 import { FriendExistsError, NotExistsError, TryingToAddYouselfError } from "../errors";
 import { PrismaClient } from "@prisma/client";
 
+import { getTimeDiffInMs } from '../testingFile';
+
+
 const prisma = new PrismaClient();
 
-async function addFriend(friendId: number, friendsName: string, userId: number) {
+async function addFriend(friendId: number, friendsName: string, userId: number, time: any) {
+  console.log(getTimeDiffInMs(time, Date.now()), "test2 initialInFunc addFriendCrud")
   const getUser = await prisma.user.findUnique({
     where: { id: userId },
     include: { friends: true },
   });
+  console.log(getTimeDiffInMs(time, Date.now()), "test3 afterFindUnique addFriendCrud")
 
   if (!getUser) return;
   if(getUser.friends.length > 10) throw new Error("Too much friends")
+  console.log(getTimeDiffInMs(time, Date.now()), "test4 afterFirstChecks addFriendCrud")
 
   const existingFriend = await prisma.friend.findFirst({
     where: { userId: userId, friendsId: friendId },
@@ -23,6 +29,7 @@ async function addFriend(friendId: number, friendsName: string, userId: number) 
     throw new TryingToAddYouselfError(
       "You can not add yourself to your friend's list"
     );
+    console.log(getTimeDiffInMs(time, Date.now()), "test5 afterSecondChecks addFriendCrud")
 
   const createFriend = await prisma.friend.create({
     data: {
@@ -31,7 +38,7 @@ async function addFriend(friendId: number, friendsName: string, userId: number) 
       user: { connect: { id: userId } },
     },
   });
-
+  console.log(getTimeDiffInMs(time, Date.now()), "test6 afterCreate addFriendCrud")
   return createFriend;
 }
 
