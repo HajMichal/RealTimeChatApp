@@ -3,19 +3,17 @@ import { jwtVerify } from "../jwt/jwt";
 import { addFriendToQueue } from "../crud/friendsQueue";
 import { FriendExistsError, TryingToAddYouselfError } from "../errors";
 
-import { getTimeDiffInMs } from "../testingFile";
+
 
 const router = Router();
 
 router.post("/addToQueue", async (req, res) => {
-    const time = Date.now()
+
     const {friendId, friendName} = req.body
     const accessToken = req.cookies.accessToken
     const userId = jwtVerify(accessToken).id
     try {
-        const friendInQueue = await addFriendToQueue(userId, friendId, friendName, time)
-        const finalTime = getTimeDiffInMs(time, Date.now())
-        console.log(finalTime, "test- addUserToQueue")
+        const friendInQueue = await addFriendToQueue(userId, friendId, friendName)
         res.json({friendInQueue: friendInQueue}).status(200)
     } catch (error) {
         if (error instanceof FriendExistsError) {

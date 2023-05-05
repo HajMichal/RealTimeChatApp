@@ -2,17 +2,14 @@ import { Router } from 'express'
 import { addFriend } from '../crud/friends';
 import { FriendExistsError, TryingToAddYouselfError } from '../errors';
 
-import { getTimeDiffInMs } from '../testingFile';
-
 const router = Router()
 
 router.post('/addFriend', async (req, res) => {
-    const time = Date.now()
+
     const {friendsId, friendsName, userId } = req.body;
-    console.log(getTimeDiffInMs(time, Date.now()), "test1 afterRequest addFriend")
+
     try {
-        await addFriend(friendsId, friendsName, userId, time)
-        console.log(getTimeDiffInMs(time, Date.now()), "test addFriend")
+        await addFriend(friendsId, friendsName, userId)
         res.sendStatus(200)
     } catch (error) {
         if (error instanceof FriendExistsError) {

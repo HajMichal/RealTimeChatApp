@@ -6,7 +6,6 @@ const router = Router();
 
 router.get("/user", (req: Request, res: Response) => {
   const currentAccessToken = req.cookies.accessToken;
-
   if (!currentAccessToken) return res.status(401).end();
 
   try {

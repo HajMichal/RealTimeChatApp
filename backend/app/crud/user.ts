@@ -1,10 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import prisma from "./prisma";
-
-
 const bcrypt = require("bcrypt");
-
-// const prisma = new PrismaClient();
 
 async function get_user_by_email(user_email: string) {
   const user = await prisma.user.findFirst({ where: { email: user_email } });
@@ -32,6 +27,18 @@ async function checkLogin(email: string, password: string) {
     throw Error("Invalid E-mail");
   }
 }
+async function registerUser(name: string, email: string, password: string){
+  if(await get_user_by_email(email)) throw new Error("Already exists")
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return await prisma.user.create({
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+    },
+  });
+}
 
 async function getAllUsers(searchedValue?: string) {
   const users = await prisma.user.findMany({
@@ -50,4 +57,4 @@ async function getAllUsers(searchedValue?: string) {
   return users;
 }
 
-export { get_user_by_email, getUserById, checkLogin, getAllUsers };
+export { get_user_by_email, getUserById, checkLogin, registerUser, getAllUsers };
