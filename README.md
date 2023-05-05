@@ -19,6 +19,8 @@ The most original idea for project
 | Light Color     | ![#F8FAFC](https://via.placeholder.com/15/F8FAFC/F8FAFC.png) #F8FAFC |
 
 ## 📔 Development
+It may works slowly on production but localy it works great
+
 
 ```bash
 git clone https://github.com/MichalBrx/RealTimeChatApp.git
