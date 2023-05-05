@@ -1,10 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-
-import { getFriendList } from "../api/getFriendList";
-import { getFriendsQueue } from "../api/getFriendsQueue";
 import { MyContext } from "../App";
 import { friend } from "../interfaces";
+import { getFriendList } from "../api/getFriendList";
 import Friends from "./Friends";
 
 const FriendsList = () => {

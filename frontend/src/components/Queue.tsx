@@ -50,13 +50,13 @@ const QueueView: React.FC<queueViewProps> = (props) => {
       friendsName: friendData.userName,
       userId: friendData.friendId 
     })
+    removeFromQueue(friendData.id)
         // adding friend to USER friendList
     addFriendFromQueue({
       friendsId: friendData.friendId,
       friendsName: friendData.friendName,
       userId: friendData.userId
     })
-    removeFromQueue(friendData.id)
   }
 
   const handleRejectButton = (friendData: invitations_requests) => {

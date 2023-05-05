@@ -1,14 +1,11 @@
 import { useQuery } from "react-query";
 import { getFriendsQueue } from "../api/getFriendsQueue";
 import Queue from "./Queue";
-import { useState } from "react";
 
 
 const FriendsQueue = () => {
 
     const { data, isLoading, isSuccess } = useQuery("friendQueue", getFriendsQueue);
-    // console.log(data?.data.queue.friendInvitations)
-    // console.log(data?.data.queue.friendRequests)
 
   return (
     <div className="w-full max-h-96 overflow-y-scroll mt-5 ">
@@ -24,3 +21,5 @@ const FriendsQueue = () => {
 };
 
 export default FriendsQueue;
+
+

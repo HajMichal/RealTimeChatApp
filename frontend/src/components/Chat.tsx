@@ -19,6 +19,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
   const messagesEndRef = useRef(null);
   const [messageList, setMessageList] = useState<messageData[]>([]);
   const [arrivalMessage, setArrivalMessage] = useState<messageData>();
+  var onnlineUsers = 0
 
   const { register, handleSubmit, reset } = useForm<msgInput>();
 
@@ -44,7 +45,9 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
     if (!socket.current) return;
     socket.current.emit("addUser", _id);
     socket.current.on("getUsers", (users: any) => {
-      console.log(users);
+      for (let i = 0; i < users.length; i++) {
+        onnlineUsers++
+      }
     });
   }, [username, _id]);
 

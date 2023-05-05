@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
@@ -27,7 +26,6 @@ const login = () => {
       navigate("/", { replace: true });
     },
   });
-  console.log((error as any)?.response.data.message)
   return (
     <div className="w-full flex justify-center bg-dark laptop:pt-40 h-screen">
       <div className="bg-dark desktop:w-1/3 tablet:h-min tablet:mt-16 max-w-md rounded-sm">
