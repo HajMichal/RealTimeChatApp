@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "real-time-chat-app-cu1i",
+  "name": "vercel.com/michalbrx/real-time-chat-app-cu1i",
   "builds": [{ "src": "script.ts", "use": "@vercel/node" }],
   "routes": [{ "src": "/(.*)", "dest": "/index.ts" }]
 }
