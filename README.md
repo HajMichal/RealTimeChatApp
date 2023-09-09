@@ -2,7 +2,10 @@
 
 <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.gif" alt="🚀" width="175" height="175">
 
-The most original idea for project 
+Deployed app is not working because I can't find good and free hosting for my backend side.
+You can install it localy.
+
+The most original idea for project...
 
 * You can create new account or log into an existing one.
 * You can invite your friends
