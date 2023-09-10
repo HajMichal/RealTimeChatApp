@@ -11,7 +11,7 @@ router.get("/friendList", async (req, res) => {
   if (!currentAccessToken) return res.status(401).end();
 
   try {
-    var payload = jwtVerify(currentAccessToken)
+    var payload = jwtVerify(currentAccessToken);
     const currentUserId = payload.id;
     const friendList = await getFriends(currentUserId);
     res.json({ friendList: friendList });

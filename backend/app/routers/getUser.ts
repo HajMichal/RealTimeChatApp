@@ -9,8 +9,8 @@ router.get("/user", (req: Request, res: Response) => {
   if (!currentAccessToken) return res.status(401).end();
 
   try {
-    var payload = jwtVerify(currentAccessToken)
-    res.send({id: payload.id, name: payload.name, email: payload.email});
+    var payload = jwtVerify(currentAccessToken);
+    res.send({ id: payload.id, name: payload.name, email: payload.email });
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       return res.sendStatus(401).end();

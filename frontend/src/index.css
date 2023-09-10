@@ -2,7 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-
+@font-face {
+  font-family: Orkney;
+  src: url("./fonts/Orkney-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: Orkney-Bold;
+  src: url("./fonts/Orkney-Bold.otf") format("opentype");
+}
+@font-face {
+  font-family: Orkney-Light;
+  src: url("./fonts/Orkney-Light.otf") format("opentype");
+}
 
 ::-webkit-scrollbar {
   width: 7px;

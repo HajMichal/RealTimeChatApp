@@ -30,15 +30,12 @@ function createAccessToken(user: newUser, res: Response) {
     sameSite: "none",
     secure: true,
   });
-  res.sendStatus(200)
+  res.sendStatus(200);
 }
 
-function jwtVerify(currentAccessToken: string){
-  var payload = jwt.verify(
-    currentAccessToken,
-    process.env.ACCESS_TOKEN_SECRET
-  );
-  return payload
+function jwtVerify(currentAccessToken: string) {
+  var payload = jwt.verify(currentAccessToken, process.env.ACCESS_TOKEN_SECRET);
+  return payload;
 }
 
 export { createAccessToken, generateAccessToken, jwtVerify };

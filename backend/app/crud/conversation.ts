@@ -3,12 +3,7 @@ import prisma from "./prisma";
 
 // const prisma = new PrismaClient();
 
-async function saveMessage(
-  message: string,
-  time: string,
-  receiverId: number,
-  userId: number
-) {
+async function saveMessage(message: string, time: string, receiverId: number, userId: number) {
   return await prisma.chats.create({
     data: {
       message: message,
@@ -44,10 +39,8 @@ const formatedMessages = (messages: Chats[]) => {
     ...message,
     time: new Date(message.time),
   }));
-  const sortedMessages = formattedMessages.sort(
-    (a: any, b: any) => a.time - b.time
-  );
-  return sortedMessages
-}
+  const sortedMessages = formattedMessages.sort((a: any, b: any) => a.time - b.time);
+  return sortedMessages;
+};
 
 export { saveMessage, loadMessage, formatedMessages };

@@ -12,9 +12,9 @@ import getFriendsList from "./routers/getFriendsList";
 import removeFriend from "./routers/removeFriends";
 import postMessage from "./routers/postMessage";
 import loadMessage from "./routers/getMessages";
-import addToQueue from "./routers/addUserToQueue"
-import getQueue from "./routers/getFriendsQueue"
-import removeFromQueue from "./routers/removeFromQueue"
+import addToQueue from "./routers/addUserToQueue";
+import getQueue from "./routers/getFriendsQueue";
+import removeFromQueue from "./routers/removeFromQueue";
 
 import { sendMsg, users } from "./interfaces";
 
@@ -39,14 +39,13 @@ app.use(
     origin: [process.env.CLIENT_URL],
     preflightContinue: false,
     methods: "GET, POST, PUT, PATCH, DELETE",
-    allowHeaders:
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    allowHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
   })
 );
 
 const io = new Server(server, {
   cors: {
-    origin: [ process.env.CLIENT_URL as string ],
+    origin: [process.env.CLIENT_URL as string],
     methods: "GET, POST",
   },
 });
@@ -59,8 +58,7 @@ let users: Array<users> = [];
 
 const addUser = (userId: number, socketId: string) => {
   if (userId === null) return;
-  !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
+  !users.some((user) => user.userId === userId) && users.push({ userId, socketId });
 };
 
 const removeUser = (socketId: string) => {
@@ -83,17 +81,17 @@ io.on("connection", (socket: any) => {
     if (!user) return;
     io.to(user.socketId).emit("getMessage", {
       messageData,
-      isSentData: true
+      isSentData: true,
     });
   });
 
   socket.on("sendNotification", ({ senderName, receiverId }: any) => {
-    const receiver = getUserSocket(receiverId)
+    const receiver = getUserSocket(receiverId);
     if (!receiver) return;
     io.to(receiver?.socketId).emit("getNotification", {
-      senderName
-    })
-  })
+      senderName,
+    });
+  });
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
@@ -114,6 +112,5 @@ app.use("/", addToQueue);
 app.use("/", getQueue);
 app.use("/", removeFromQueue);
 
-var port = process.env.PORT as any || 3000;
-server.listen(port, '0.0.0.0', () => (console.log("Server running!")))
-
+var port = (process.env.PORT as any) || 3000;
+server.listen(port, "0.0.0.0", () => console.log("Server running!"));

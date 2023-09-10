@@ -3,14 +3,19 @@ const bcrypt = require("bcrypt");
 
 async function get_user_by_email(user_email: string) {
   const user = await prisma.user.findFirst({ where: { email: user_email } });
-  
+
   return user;
 }
 
 async function getUserById(userId: number) {
   return await prisma.user.findUnique({
     where: { id: userId },
-    select: { id: true, name: true, friendQueue: { select: { friendId: true } }, friends: { select: { friendsId: true } } },
+    select: {
+      id: true,
+      name: true,
+      friendQueue: { select: { friendId: true } },
+      friends: { select: { friendsId: true } },
+    },
   });
 }
 
@@ -27,8 +32,8 @@ async function checkLogin(email: string, password: string) {
     throw Error("Invalid E-mail");
   }
 }
-async function registerUser(name: string, email: string, password: string){
-  if(await get_user_by_email(email)) throw new Error("Already exists")
+async function registerUser(name: string, email: string, password: string) {
+  if (await get_user_by_email(email)) throw new Error("Already exists");
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(password, salt);
   return await prisma.user.create({
@@ -49,10 +54,10 @@ async function getAllUsers(searchedValue?: string) {
     },
     where: {
       name: {
-        contains: searchedValue
+        contains: searchedValue,
       },
     },
-    take: 4
+    take: 4,
   });
   return users;
 }
