@@ -56,7 +56,7 @@ interface queueData {
   friendInvitations: invitations_requests[];
   friendRequests: invitations_requests[];
 }
-interface queueProps {
+interface QueueProps {
   queue: queueData;
 }
 
@@ -89,7 +89,7 @@ export type {
   friendViewProps,
   queueViewProps,
   sendMessage,
-  queueProps,
+  QueueProps,
   queueData,
   invitations_requests,
 };

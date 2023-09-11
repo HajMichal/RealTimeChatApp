@@ -12,7 +12,9 @@ import Alert from "./components/Alert";
 import Drawer from "./components/Drawer";
 import FriendsList from "./components/FriendsList";
 import FriendsQueue from "./components/FriendsQueue";
-import LookForFriends from "./components/LookForFriends";
+import { SearchBar } from "./components/SearchBar";
+import { FriendCard } from "./components/FriendCard";
+
 import { friend } from "./interfaces";
 import { Avatar, Indicator, Input } from "@mantine/core";
 
@@ -39,7 +41,6 @@ function App() {
     retry: 2,
     retryDelay: 700,
   });
-  const _id = data?.data.id;
 
   const handleSocket = (socketId: string) => {
     setSocket(socketId);
@@ -116,42 +117,20 @@ function App() {
             <FiSettings className="w-5 h-5 text-brand " />
           </div>
         </div>
-        <div id="searchBar" className="w-full my-5">
-          <Input icon={<BsSearch />} radius="md" size="md" placeholder="Search..." />
-        </div>
-        <div id="pendingFriends">
+        <SearchBar mainUserId={data?.data.id} />
+        <div id="pendingFriends" className="mt-24">
           <h2 className="font-orkneyLight">Pending:</h2>
-          <div className="flex items-center p-2">
-            <Avatar
-              src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
-              alt="avatar"
-              radius="xl"
-              color="white"
-            />
-            <div className="px-2 text-black w-full">
-              <h3 className="text-sm">Name Surname</h3>
-              <h4 className=" text-brand text-xs">Waiting For Submit</h4>
-            </div>
-            <div className="text-xs text-right">14:28</div>
-          </div>
+          <FriendsQueue />
         </div>
+
         <div id="friendsList" className="pt-5">
           <h2 className="font-orkneyLight">Friends:</h2>
-          <div className="flex items-center p-2">
-            <Indicator color="teal" processing>
-              <Avatar
-                src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
-                alt="avatar"
-                radius="xl"
-                color="white"
-              />
-            </Indicator>
-            <div className="px-2 text-black w-full">
-              <h3 className="text-sm">Name Surname</h3>
-              <h4 className=" text-brand text-xs">Last Message</h4>
-            </div>
-            <div className="text-xs w-full text-right">14:28</div>
-          </div>
+          <FriendCard
+            name="Klaudia Haj"
+            ping
+            time="10:28"
+            avatar="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
+          />
         </div>
       </div>
       <div id="MesseageArea" className="w-full h-screen flex flex-col justify-between pb-8">

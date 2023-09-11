@@ -1,25 +1,56 @@
 import { useQuery } from "react-query";
 import { getFriendsQueue } from "../api/getFriendsQueue";
 import Queue from "./Queue";
-
+import { QueueProps, queueData } from "../interfaces";
+import { Loading } from "./Loading";
+import { FriendCard } from "./FriendCard";
 
 const FriendsQueue = () => {
+  const { data, isLoading, isSuccess } = useQuery("friendQueue", getFriendsQueue, {
+    onSuccess(data) {
+      const { friendRequests, friendInvitations } = data.data.queue;
 
-    const { data, isLoading, isSuccess } = useQuery("friendQueue", getFriendsQueue);
+      return (
+        <div className="w-full max-h-96 overflow-y-scroll mt-5 ">
+          {friendInvitations.map((friendData) => (
+            <FriendCard key={friendData.id} avatar={""} name={friendData.userName} />
+          ))}
+          {friendRequests.map((friendData) => (
+            <FriendCard key={friendData.id} avatar={""} name={friendData.userName} />
+          ))}
+        </div>
+      );
+    },
+  });
+  console.log(data?.data.queue);
+  if (isLoading) return <Loading />;
 
   return (
     <div className="w-full max-h-96 overflow-y-scroll mt-5 ">
-      {isLoading ? (
-        <div className="flex justify-center items-center">
-          <div className="w-12 h-12 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>
-        </div>
-      ) : null}
-    {/* @ts-ignore */}
-      {isSuccess ? <Queue queue={data?.data.queue} /> : null}
+      {isSuccess &&
+        data.data.queue.friendInvitations.map((friendData) => (
+          <FriendCard
+            key={friendData.id}
+            avatar={
+              "https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
+            }
+            requestFriend
+            name={friendData.friendName}
+          />
+        ))}
+      {isSuccess &&
+        data.data.queue.friendRequests.map((friendData) => (
+          <FriendCard
+            key={friendData.id}
+            avatar={
+              "https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
+            }
+            requestFriend
+            name={friendData.friendName}
+          />
+        ))}
     </div>
   );
 };
 
 export default FriendsQueue;
-
-

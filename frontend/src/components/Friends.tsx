@@ -6,19 +6,17 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 import { remover } from "../api/removeFriend";
 
-function Friends({ friends }: friendProps ) {
-  return friends?.map((friend: friend) => (
-    <FriendView key={friend.id} data={friend}/>
-  ));
+function Friends({ friends }: friendProps) {
+  return friends?.map((friend: friend) => <FriendView key={friend.id} data={friend} />);
 }
 
 const FriendView: React.FC<friendViewProps> = (props) => {
   const [viewOptions, setViewOptions] = useState<boolean>(false);
-  const [notification, setNotification] = useState(false)
-  const [sender, setSender] = useState<number>(0)
-  const [onnlineStatus, setOnnlineStatus] = useState(false)
-  
-  const { socket } = useContext(MyContext)
+  const [notification, setNotification] = useState(false);
+  const [sender, setSender] = useState<number>(0);
+  const [onnlineStatus, setOnnlineStatus] = useState(false);
+
+  const { socket } = useContext(MyContext);
   const { handleReceiverId } = useContext(MyContext);
 
   // W tym miejscu queryClient pomaga w szybszym usunieciu z ekranu danego uzytkownika. Usuwa go odrazu
@@ -37,38 +35,43 @@ const FriendView: React.FC<friendViewProps> = (props) => {
     mutate(friendId);
   };
 
-  // Setting notification when user is onnline 
+  // Setting notification when user is onnline
   useEffect(() => {
     if (!socket) return;
-    setOnnlineStatus(true)
+    setOnnlineStatus(true);
     socket.on("getNotification", (data: any) => {
       setSender(data.senderName);
     });
-  }, [socket])
+  }, [socket]);
 
-    // Setting notification when user is offline
+  // Setting notification when user is offline
   useEffect(() => {
-    if(onnlineStatus) return
-    setNotification(props.data.isSentMessage)
-  }, [props, startChat, notification])
+    if (onnlineStatus) return;
+    setNotification(props.data.isSentMessage);
+  }, [props, startChat, notification]);
 
   return (
     <div
       className="card-body my-2 p-1 text-mid overflow-hidden w-full duration-300 hover:cursor-pointer hover:shadow-md hover:shadow-darkblue"
       key={props.data.id}
-      onClick={() => {setNotification(false), setSender(0)}}
+      onClick={() => {
+        setNotification(false), setSender(0);
+      }}
     >
       <div className="grid grid-cols-8 h-14 items-center gap-3 ml-4">
         <div className="avatar -my-4 col-span-2" onClick={startChat}>
           <div className="w-12 rounded-full">
-            <img alt="avatar" src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png" />
+            <img
+              alt="avatar"
+              src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
+            />
           </div>
-          {notification || sender === props.data.friendsId
-          ? <span className="relative flex justify-center items-start">
+          {notification || sender === props.data.friendsId ? (
+            <span className="relative flex justify-center items-start">
               <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-brand opacity-75 -ml-2"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-brand -ml-2"></span>
             </span>
-          : null}
+          ) : null}
         </div>
 
         <button
