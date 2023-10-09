@@ -1,3 +1,4 @@
+Current Version of vercel app is not working correctly, Im in the process of refactor
 # Real time chat app
 
 <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.gif" alt="🚀" width="175" height="175">
