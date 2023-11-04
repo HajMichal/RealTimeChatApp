@@ -6,17 +6,18 @@ import { BsSearch, BsEmojiSmile, BsSendFill } from "react-icons/bs";
 import { TbPhoneCall } from "react-icons/tb";
 import { HiOutlineVideoCamera } from "react-icons/hi";
 import { HiOutlineInformationCircle } from "react-icons/hi";
+import { AiOutlineDoubleLeft } from "react-icons/ai";
+import { useMediaQuery } from "react-responsive";
+import { useDisclosure } from "@mantine/hooks";
+import { Drawer, Button } from "@mantine/core";
 
-import Chat from "./components/Chat";
-import Alert from "./components/Alert";
-import Drawer from "./components/Drawer";
-import FriendsList from "./components/FriendsList";
 import FriendsQueue from "./components/FriendsQueue";
 import { SearchBar } from "./components/SearchBar";
 import { FriendCard } from "./components/FriendCard";
 
 import { friend } from "./interfaces";
 import { Avatar, Indicator, Input } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 type ContextType = {
   handleReceiverId: (receiverId: number) => void;
@@ -32,16 +33,19 @@ export const MyContext = React.createContext<ContextType>({
 });
 
 function App() {
+  const navigate = useNavigate();
   const [receiverId, setReceiverId] = useState<number | null>(null);
   const [friendsList, setFriendsList] = useState<friend[]>();
   const [currentChatFriend, setCurrentChatFriend] = useState<friend>();
   const [socket, setSocket] = useState<string>();
-
-  const { data, isError } = useQuery("user", getCurrentUserData, {
+  const { data: currentUserData, isError } = useQuery("user", getCurrentUserData, {
     retry: 2,
-    retryDelay: 700,
+    retryDelay: 500,
+    onError() {
+      navigate("/login");
+    },
   });
-
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 700px)" });
   const handleSocket = (socketId: string) => {
     setSocket(socketId);
   };
@@ -59,7 +63,7 @@ function App() {
       setCurrentChatFriend(friend);
     }
   }, [friendsList, receiverId]);
-
+  const [opened, { open, close }] = useDisclosure(false);
   return (
     // <div className="flex w-full h-screen justify-center pb-14 pt-5 bg-dark">
     //   {isError ? <Alert /> : null}
@@ -110,32 +114,66 @@ function App() {
     //   </div>
     // </div>
     <div className="bg-backgroundGray w-screen h-screen font-orkney flex">
-      <div id="sidebar" className="w-[20%] min-w-[320px] bg-white h-screen p-5">
-        <div className="flex items-center justify-between ">
-          <h1 className="text-brand font-orkneyBold text-4xl ">ChatWebApp</h1>
-          <div className="bg-green-100 rounded-full w-8 h-8 flex justify-center items-center">
-            <FiSettings className="w-5 h-5 text-brand " />
+      {isSmallScreen && (
+        <Drawer opened={opened} onClose={close}>
+          <div id="sidebar" className="w-[20%] min-w-[320px] bg-white p-5">
+            <div className="flex items-center justify-between ">
+              <h1 className="text-brand font-orkneyBold text-4xl ">ChatWebApp</h1>
+              <div className="bg-green-100 rounded-full w-8 h-8 flex justify-center items-center">
+                <FiSettings className="w-5 h-5 text-brand " />
+              </div>
+            </div>
+            <SearchBar mainUserId={currentUserData?.data.id} />
+            <div id="pendingFriends" className="mt-24">
+              <h2 className="font-orkneyLight">Pending:</h2>
+              <FriendsQueue />
+            </div>
+
+            <div id="friendsList" className="pt-5">
+              <h2 className="font-orkneyLight">Friends:</h2>
+              <FriendCard
+                name="Klaudia Haj"
+                ping
+                time="10:28"
+                avatar="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
+              />
+            </div>
+          </div>
+        </Drawer>
+      )}
+      {!isSmallScreen && (
+        <div id="sidebar" className="w-[20%] min-w-[320px] bg-white h-screen p-5">
+          <div className="flex items-center justify-between ">
+            <h1 className="text-brand font-orkneyBold text-4xl ">ChatWebApp</h1>
+            <div className="bg-green-100 rounded-full w-8 h-8 flex justify-center items-center">
+              <FiSettings className="w-5 h-5 text-brand " />
+            </div>
+          </div>
+          <SearchBar mainUserId={currentUserData?.data.id} />
+          <div id="pendingFriends" className="mt-24">
+            <h2 className="font-orkneyLight">Pending:</h2>
+            <FriendsQueue />
+          </div>
+
+          <div id="friendsList" className="pt-5">
+            <h2 className="font-orkneyLight">Friends:</h2>
+            <FriendCard
+              name="Klaudia Haj"
+              ping
+              time="10:28"
+              avatar="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
+            />
           </div>
         </div>
-        <SearchBar mainUserId={data?.data.id} />
-        <div id="pendingFriends" className="mt-24">
-          <h2 className="font-orkneyLight">Pending:</h2>
-          <FriendsQueue />
-        </div>
-
-        <div id="friendsList" className="pt-5">
-          <h2 className="font-orkneyLight">Friends:</h2>
-          <FriendCard
-            name="Klaudia Haj"
-            ping
-            time="10:28"
-            avatar="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
-          />
-        </div>
-      </div>
+      )}
       <div id="MesseageArea" className="w-full h-screen flex flex-col justify-between pb-8">
         <div className="h-[8%] w-full bg-white bg-opacity-50 flex items-center justify-between px-10 p-3">
           <div className="flex">
+            {isSmallScreen && (
+              <button>
+                <AiOutlineDoubleLeft onClick={open} className="text-brand text-xl mr-6" />
+              </button>
+            )}
             <Avatar
               src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
               alt="avatar"

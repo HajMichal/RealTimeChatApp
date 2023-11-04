@@ -19,6 +19,7 @@ const register = () => {
 
   const submitForm = (data: newUser) => {
     const user = { ...data };
+    console.log(user);
     mutate(user);
   };
 
@@ -45,11 +46,11 @@ const register = () => {
         >
           <div className="form-control w-full max-w-xs">
             <label className="label">
-              {
-                isError && (error as any).response.data.message === "Short name" 
-                ? <span className="label-text text-error">Name is too short</span>
-                : <span className="label-text">What's your name?</span>
-              }
+              {isError && (error as any).response.data.message === "Short name" ? (
+                <span className="label-text text-error">Name is too short</span>
+              ) : (
+                <span className="label-text">What's your name?</span>
+              )}
             </label>
             <input
               {...register("name", {
@@ -61,12 +62,12 @@ const register = () => {
             />
           </div>
           <div className="form-control w-full max-w-xs my-4">
-          <label className="label">
-              {
-                isError && (error as any).response.data.message === "Already exists" 
-                ? <span className="label-text text-error">E-mail already exists</span>
-                : <span className="label-text">What's your e-mail?</span>
-              }
+            <label className="label">
+              {isError && (error as any).response.data.message === "Already exists" ? (
+                <span className="label-text text-error">E-mail already exists</span>
+              ) : (
+                <span className="label-text">What's your e-mail?</span>
+              )}
             </label>
             <input
               {...register("email", {
@@ -108,9 +109,7 @@ const register = () => {
         </form>
         <div>
           <fieldset className="border-t-2 border-mid mx-10">
-            <legend className="mx-auto px-5 text-mid text-2xl font-semibold italic">
-              Or
-            </legend>
+            <legend className="mx-auto px-5 text-mid text-2xl font-semibold italic">Or</legend>
             <div className="w-full pt-4 text-center text-mid font-medium text-lg mb-8">
               <Link to="/login" className="hover:text-light">
                 Log in!
