@@ -1,9 +1,12 @@
-import { useQuery } from "react-query";
+import { useContext, useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getFriendsQueue } from "../api/getFriendsQueue";
-import Queue from "./Queue";
-import { QueueProps, queueData } from "../interfaces";
 import { Loading } from "./Loading";
 import { FriendCard } from "./FriendCard";
+import { invitationsRequests } from "../interfaces";
+import { addFriend } from "../api/addFriend";
+import { removeQueue } from "../api/removeInvitation";
+import { MyContext } from "../App";
 
 const FriendsQueue = () => {
   const { data, isLoading, isSuccess } = useQuery("friendQueue", getFriendsQueue, {
@@ -13,16 +16,16 @@ const FriendsQueue = () => {
       return (
         <div className="w-full max-h-96 overflow-y-scroll mt-5 ">
           {friendInvitations.map((friendData) => (
-            <FriendCard key={friendData.id} avatar={""} name={friendData.userName} />
+            <FriendCard key={friendData.id} avatar={""} data={friendData} />
           ))}
           {friendRequests.map((friendData) => (
-            <FriendCard key={friendData.id} avatar={""} name={friendData.userName} />
+            <FriendCard key={friendData.id} avatar={""} data={friendData} />
           ))}
         </div>
       );
     },
   });
-  console.log(data?.data.queue);
+
   if (isLoading) return <Loading />;
 
   return (
@@ -35,7 +38,8 @@ const FriendsQueue = () => {
               "https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
             }
             requestFriend
-            name={friendData.friendName}
+            isInvitation
+            data={friendData}
           />
         ))}
       {isSuccess &&
@@ -46,7 +50,7 @@ const FriendsQueue = () => {
               "https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
             }
             requestFriend
-            name={friendData.friendName}
+            data={friendData}
           />
         ))}
     </div>

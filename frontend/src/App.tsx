@@ -18,6 +18,8 @@ import { FriendCard } from "./components/FriendCard";
 import { friend } from "./interfaces";
 import { Avatar, Indicator, Input } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import Chat from "./components/Chat";
+import FriendsList from "./components/FriendsList";
 
 type ContextType = {
   handleReceiverId: (receiverId: number) => void;
@@ -69,9 +71,9 @@ function App() {
     //   {isError ? <Alert /> : null}
 
     //   <div className="absolute top-10 left-5 z-40 tablet:hidden">
-    //     <MyContext.Provider value={{ handleReceiverId, handleAllFriends, socket, _id }}>
-    //       <Drawer />
-    //     </MyContext.Provider>
+    // <MyContext.Provider value={{ handleReceiverId, handleAllFriends, socket, _id }}>
+    //   <Drawer />
+    // </MyContext.Provider>
     //   </div>
     //   <div
     //     className={
@@ -114,9 +116,37 @@ function App() {
     //   </div>
     // </div>
     <div className="bg-backgroundGray w-screen h-screen font-orkney flex">
-      {isSmallScreen && (
-        <Drawer opened={opened} onClose={close}>
-          <div id="sidebar" className="w-[20%] min-w-[320px] bg-white p-5">
+      <MyContext.Provider value={{ handleReceiverId, handleAllFriends, socket, _id: null }}>
+        {isSmallScreen && (
+          <Drawer opened={opened} onClose={close}>
+            <div id="sidebar" className="w-[20%] min-w-[320px] bg-white p-5">
+              <div className="flex items-center justify-between ">
+                <h1 className="text-brand font-orkneyBold text-4xl ">ChatWebApp</h1>
+                <div className="bg-green-100 rounded-full w-8 h-8 flex justify-center items-center">
+                  <FiSettings className="w-5 h-5 text-brand " />
+                </div>
+              </div>
+              <SearchBar mainUserId={currentUserData?.data.id} />
+              <div id="pendingFriends" className="mt-24">
+                <h2 className="font-orkneyLight">Pending:</h2>
+                <FriendsQueue />
+              </div>
+
+              <div id="friendsList" className="pt-5">
+                <h2 className="font-orkneyLight">Friends:</h2>
+                <FriendsList />
+                {/* <FriendCard
+                  data={}
+                  ping
+                  time="10:28"
+                  avatar="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
+                /> */}
+              </div>
+            </div>
+          </Drawer>
+        )}
+        {!isSmallScreen && (
+          <div id="sidebar" className="w-[20%] min-w-[320px] bg-white h-screen p-5">
             <div className="flex items-center justify-between ">
               <h1 className="text-brand font-orkneyBold text-4xl ">ChatWebApp</h1>
               <div className="bg-green-100 rounded-full w-8 h-8 flex justify-center items-center">
@@ -131,42 +161,15 @@ function App() {
 
             <div id="friendsList" className="pt-5">
               <h2 className="font-orkneyLight">Friends:</h2>
-              <FriendCard
-                name="Klaudia Haj"
-                ping
-                time="10:28"
-                avatar="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
-              />
+              <FriendsList />
             </div>
           </div>
-        </Drawer>
-      )}
-      {!isSmallScreen && (
-        <div id="sidebar" className="w-[20%] min-w-[320px] bg-white h-screen p-5">
-          <div className="flex items-center justify-between ">
-            <h1 className="text-brand font-orkneyBold text-4xl ">ChatWebApp</h1>
-            <div className="bg-green-100 rounded-full w-8 h-8 flex justify-center items-center">
-              <FiSettings className="w-5 h-5 text-brand " />
-            </div>
-          </div>
-          <SearchBar mainUserId={currentUserData?.data.id} />
-          <div id="pendingFriends" className="mt-24">
-            <h2 className="font-orkneyLight">Pending:</h2>
-            <FriendsQueue />
-          </div>
-
-          <div id="friendsList" className="pt-5">
-            <h2 className="font-orkneyLight">Friends:</h2>
-            <FriendCard
-              name="Klaudia Haj"
-              ping
-              time="10:28"
-              avatar="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
-            />
-          </div>
-        </div>
-      )}
-      <div id="MesseageArea" className="w-full h-screen flex flex-col justify-between pb-8">
+        )}
+      </MyContext.Provider>
+      <div
+        id="MesseageArea"
+        className="w-full h-screen overflow-hidden flex flex-col justify-between pb-8"
+      >
         <div className="h-[8%] w-full bg-white bg-opacity-50 flex items-center justify-between px-10 p-3">
           <div className="flex">
             {isSmallScreen && (
@@ -192,14 +195,13 @@ function App() {
             <HiOutlineInformationCircle className="w-8 h-8 text-brand" />
           </div>
         </div>
-        <div className="w-full px-4 flex">
-          <Input
-            icon={<BsEmojiSmile className="w-6 h-6" />}
-            rightSection={<BsSendFill className="w-8 h-8 text-brand" />}
-            radius="lg"
-            size="xl"
-            placeholder="Write a message"
-            className="w-full"
+        <div className="w-full px-4 h-full max-h-[82%]">
+          <Chat
+            username={currentUserData?.data.name}
+            _id={currentUserData?.data.id}
+            receiverId={receiverId}
+            chatFriend={currentChatFriend}
+            setSocket={handleSocket}
           />
         </div>
       </div>

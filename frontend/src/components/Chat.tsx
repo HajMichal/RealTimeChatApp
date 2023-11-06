@@ -4,7 +4,7 @@ import { io, Socket } from "socket.io-client";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import { TbSend } from "react-icons/tb";
-import { BsFillChatDotsFill } from "react-icons/bs";
+import { BsEmojiSmile, BsFillChatDotsFill, BsSendFill } from "react-icons/bs";
 import { motion } from "framer-motion";
 
 import { msgInput, chatTypes, messageData } from "../interfaces";
@@ -12,6 +12,7 @@ import { msgInput, chatTypes, messageData } from "../interfaces";
 import { loadMessage } from "../api/getMessages";
 import { saveMessage } from "../api/saveMessage";
 import { formatTime } from "./formatTime";
+import { Input } from "@mantine/core";
 
 const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) => {
   const socket = useRef<Socket>();
@@ -19,7 +20,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
   const messagesEndRef = useRef(null);
   const [messageList, setMessageList] = useState<messageData[]>([]);
   const [arrivalMessage, setArrivalMessage] = useState<messageData>();
-  var onnlineUsers = 0
+  var onnlineUsers = 0;
 
   const { register, handleSubmit, reset } = useForm<msgInput>();
 
@@ -37,21 +38,21 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
 
   useEffect(() => {
     socket.current = io(import.meta.env.VITE_BACKEND_URL);
-    setSocket(socket.current)
+    setSocket(socket.current);
   }, []);
 
-  // Adding users to current Onnline list 
+  // Adding users to current Onnline list
   useEffect(() => {
     if (!socket.current) return;
     socket.current.emit("addUser", _id);
     socket.current.on("getUsers", (users: any) => {
       for (let i = 0; i < users.length; i++) {
-        onnlineUsers++
+        onnlineUsers++;
       }
     });
   }, [username, _id]);
 
-  // Listening 
+  // Listening
   useEffect(() => {
     if (!socket.current) return;
     socket.current.on("getMessage", ({ messageData }) => {
@@ -62,8 +63,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
         receiverId: messageData.receiverId,
       };
 
-      setArrivalMessage(messageData_)
-
+      setArrivalMessage(messageData_);
     });
   }, [arrivalMessage]);
 
@@ -75,7 +75,6 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
     if (arrivalMessage && chatFriend?.friendsId === arrivalMessage.userId) {
       setMessageList((prev) => [...prev, arrivalMessage]);
     }
-
   }, [chatFriend, isSuccess, arrivalMessage]);
 
   useEffect(() => {
@@ -89,14 +88,13 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
     }
   }, [messageList]);
 
-
   const handleNotification = () => {
     if (!socket.current) return;
     socket.current.emit("sendNotification", {
       senderName: _id,
-      receiverId: receiverId
+      receiverId: receiverId,
     });
-  }
+  };
 
   const sendMessage: SubmitHandler<msgInput> = async (data) => {
     if (data.message !== "" && socket.current) {
@@ -108,22 +106,22 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
       };
       if (isError) return null;
 
-        socket.current.emit("sendMessage", {
-          receiverId: receiverId,
-          messageData,
-          senderId: _id,
-        });
-        setMessageList((prev) => [...prev, messageData]);
-        handleNotification()
-        mutate(messageData);
-      }
-    
+      socket.current.emit("sendMessage", {
+        receiverId: receiverId,
+        messageData,
+        senderId: _id,
+      });
+      setMessageList((prev) => [...prev, messageData]);
+      handleNotification();
+      mutate(messageData);
+    }
+
     reset();
   };
 
   return (
-    <>
-      <div className="row-start-1 row-span-5 overflow-y-scroll overflow-x-hidden scrollbar-hide scroll-smooth scroll">
+    <div className="h-full">
+      <div className="h-[90%] overflow-y-scroll overflow-x-hidden scrollbar-hide scroll-smooth scroll">
         <div className="flex tablet:hidden z-30 fixed bg-dark w-11/12">
           <h1 className="w-full text-center font-semibold text-3xl italic my-2">
             <span className="text-brand">Chat</span>App
@@ -148,9 +146,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
                   <li
                     ref={messagesEndRef}
                     className={
-                      _id === messageContent.userId
-                        ? "chat chat-end my-3 "
-                        : "chat chat-start my-3"
+                      _id === messageContent.userId ? "chat chat-end my-3 " : "chat chat-start my-3"
                     }
                     key={index}
                   >
@@ -189,7 +185,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
       </div>
       <motion.form
         onSubmit={handleSubmit(sendMessage)}
-        className="flex justify-center self-center w-full row-start-6"
+        className="flex justify-center w-full mt-5"
         initial={{ opacity: 0, scale: receiverId !== null ? 0.5 : 0 }}
         animate={{
           opacity: receiverId !== null ? 1 : 0,
@@ -197,7 +193,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
         }}
         transition={{ duration: 0.4 }}
       >
-        <input
+        {/* <input
           {...register("message")}
           type="text"
           placeholder="Type here"
@@ -216,9 +212,21 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
         >
           {" "}
           <TbSend className="w-full h-full" />
-        </button>
+        </button> */}
+        <Input
+          icon={<BsEmojiSmile className="w-6 h-6" />}
+          rightSection={<BsSendFill className="w-8 h-8 text-brand" />}
+          {...register("message")}
+          radius="lg"
+          size="xl"
+          placeholder="Write a message"
+          className="w-full"
+          onKeyDown={(event) => {
+            event.key === "Enter" && handleSubmit(sendMessage);
+          }}
+        />{" "}
       </motion.form>
-    </>
+    </div>
   );
 };
 
