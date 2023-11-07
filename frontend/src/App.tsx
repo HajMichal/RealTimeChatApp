@@ -166,10 +166,7 @@ function App() {
           </div>
         )}
       </MyContext.Provider>
-      <div
-        id="MesseageArea"
-        className="w-full h-screen overflow-hidden flex flex-col justify-between pb-8"
-      >
+      <div id="MesseageArea" className="w-full h-screen overflow-hidden flex flex-col pb-3">
         <div className="h-[8%] w-full bg-white bg-opacity-50 flex items-center justify-between px-10 p-3">
           <div className="flex">
             {isSmallScreen && (
@@ -177,25 +174,33 @@ function App() {
                 <AiOutlineDoubleLeft onClick={open} className="text-brand text-xl mr-6" />
               </button>
             )}
-            <Avatar
-              src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
-              alt="avatar"
-              radius="xl"
-              color="white"
-              size={50}
-            />
-            <div className="px-2 text-black w-full">
-              <h3 className="">Name Surname</h3>
-              <h4 className=" text-brand text-sm">Typing...</h4>
+            {currentChatFriend && (
+              <>
+                <Avatar
+                  src="https://w7.pngwing.com/pngs/122/295/png-transparent-open-user-profile-facebook-free-content-facebook-silhouette-avatar-standing.png"
+                  alt="avatar"
+                  radius="xl"
+                  color="white"
+                  size={50}
+                />
+                <div className="px-2 text-black w-full">
+                  <h3 className="">{currentChatFriend?.friendsName}</h3>
+                  <h4 className=" text-brand text-sm">
+                    {currentChatFriend.isSentMessage ? "Sent you a message" : "Write message"}
+                  </h4>
+                </div>
+              </>
+            )}
+          </div>
+          {currentChatFriend && (
+            <div className="flex items-center gap-8">
+              <HiOutlineVideoCamera className="w-9 h-9 text-brand" />
+              <TbPhoneCall className="w-8 h-8 text-brand" />
+              <HiOutlineInformationCircle className="w-8 h-8 text-brand" />
             </div>
-          </div>
-          <div className="flex items-center gap-8">
-            <HiOutlineVideoCamera className="w-9 h-9 text-brand" />
-            <TbPhoneCall className="w-8 h-8 text-brand" />
-            <HiOutlineInformationCircle className="w-8 h-8 text-brand" />
-          </div>
+          )}
         </div>
-        <div className="w-full px-4 h-full max-h-[82%]">
+        <div className="w-full px-4 h-full max-h-[92%] mt-5">
           <Chat
             username={currentUserData?.data.name}
             _id={currentUserData?.data.id}

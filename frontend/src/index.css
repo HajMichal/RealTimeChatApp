@@ -16,7 +16,7 @@
 }
 
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -24,7 +24,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #10214a;
+  background-color: green;
   border-radius: 20px;
   border: 3px solid transparent;
   background-clip: content-box;
@@ -34,6 +34,15 @@
   background-color: #a8bbbf;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 
 #text-area {
     height: 5em

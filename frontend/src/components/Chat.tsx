@@ -121,12 +121,7 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
 
   return (
     <div className="h-full">
-      <div className="h-[90%] overflow-y-scroll overflow-x-hidden scrollbar-hide scroll-smooth scroll">
-        <div className="flex tablet:hidden z-30 fixed bg-dark w-11/12">
-          <h1 className="w-full text-center font-semibold text-3xl italic my-2">
-            <span className="text-brand">Chat</span>App
-          </h1>
-        </div>
+      <div className="h-[90%] overflow-y-scroll overflow-x-hidden scrollbar-hide scroll-smooth no-scrollbar scroll">
         {isLoading ? (
           <div className="flex justify-center items-center ">
             <div className="w-20 h-20 border-2 border-t-dark rounded-full border-brand border-b-transparent animate-spin"></div>
@@ -166,8 +161,8 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
                     <div
                       className={
                         _id === messageContent.userId
-                          ? "chat-bubble bg-brand text-light font-medium"
-                          : "chat-bubble bg-darkblue text-light font-medium"
+                          ? "chat-bubble items-end bg-brand text-light font-medium"
+                          : "chat-bubble items-end bg-darkblue text-light font-medium"
                       }
                     >
                       {messageContent.message}
@@ -193,26 +188,6 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
         }}
         transition={{ duration: 0.4 }}
       >
-        {/* <input
-          {...register("message")}
-          type="text"
-          placeholder="Type here"
-          className={
-            receiverId !== null
-              ? "input input-bordered input-md rounded-none w-full max-w-lg mx-2"
-              : "hidden"
-          }
-          onKeyDown={(event) => {
-            event.key === "Enter" && handleSubmit(sendMessage);
-          }}
-        />
-        <button
-          type="submit"
-          className={receiverId !== null ? "w-9 text-mid block" : "hidden"}
-        >
-          {" "}
-          <TbSend className="w-full h-full" />
-        </button> */}
         <Input
           icon={<BsEmojiSmile className="w-6 h-6" />}
           rightSection={<BsSendFill className="w-8 h-8 text-brand" />}
