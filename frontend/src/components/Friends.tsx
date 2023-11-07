@@ -52,7 +52,7 @@ const FriendView: React.FC<friendViewProps> = (props) => {
 
   return (
     <div
-      className="card-body my-2 p-1 text-mid overflow-hidden w-full duration-300 hover:cursor-pointer hover:shadow-md hover:shadow-darkblue"
+      className="card-body my-2 p-1 text-mid overflow-hidden w-full duration-300 hover:cursor-pointer hover:shadow-sm hover:shadow-brand"
       key={props.data.id}
       onClick={() => {
         setNotification(false), setSender(0);
@@ -81,7 +81,7 @@ const FriendView: React.FC<friendViewProps> = (props) => {
           {props.data.friendsName}
         </button>
         <div
-          className={`h-full w-full ml-2 col-start-7 col-end-8 bg-dark ${
+          className={`h-full w-full ml-2 col-start-7 col-end-8  ${
             viewOptions ? "flex flex-wrap" : "hidden"
           }`}
         >

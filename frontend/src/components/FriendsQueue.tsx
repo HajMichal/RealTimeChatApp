@@ -1,12 +1,7 @@
-import { useContext, useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { getFriendsQueue } from "../api/getFriendsQueue";
 import { Loading } from "./Loading";
 import { FriendCard } from "./FriendCard";
-import { invitationsRequests } from "../interfaces";
-import { addFriend } from "../api/addFriend";
-import { removeQueue } from "../api/removeInvitation";
-import { MyContext } from "../App";
 
 const FriendsQueue = () => {
   const { data, isLoading, isSuccess } = useQuery("friendQueue", getFriendsQueue, {

@@ -19,7 +19,6 @@ const register = () => {
 
   const submitForm = (data: newUser) => {
     const user = { ...data };
-    console.log(user);
     mutate(user);
   };
 

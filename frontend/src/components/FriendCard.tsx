@@ -44,7 +44,6 @@ export const FriendCard = ({
   });
 
   const handleAcceptButton = (friendData: invitationsRequests) => {
-    console.log("test");
     // adding friend to FRIEND friendList
     addFriendFromQueue({
       friendsId: friendData.userId,
@@ -83,13 +82,24 @@ export const FriendCard = ({
             : "Last Message"}
         </h4>
       </div>
-      {isInvitation && (
-        <button className="p-3 bg-brand" onClick={() => handleAcceptButton(data!)}>
-          add
-        </button>
-      )}
-      {isInvitation && <button onClick={void handleRejectButton}>remove</button>}
-      {/* <div className="text-xs text-right">{time}</div> */}
+      <div className="gap-2 flex flex-col text-sm">
+        {isInvitation && (
+          <button
+            className="px-4 w-full bg-brand text-white hover:opacity-80 duration-150 hover:scale-105"
+            onClick={() => handleAcceptButton(data!)}
+          >
+            Accept
+          </button>
+        )}
+        {isInvitation && (
+          <button
+            className="px-4 w-full bg-red-600 text-white hover:opacity-90 duration-150 hover:scale-105"
+            onClick={() => handleRejectButton(data!)}
+          >
+            Reject
+          </button>
+        )}
+      </div>
     </div>
   );
 };

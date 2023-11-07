@@ -161,8 +161,8 @@ const Chat = ({ username, _id, receiverId, chatFriend, setSocket }: chatTypes) =
                     <div
                       className={
                         _id === messageContent.userId
-                          ? "chat-bubble items-end bg-brand text-light font-medium"
-                          : "chat-bubble items-end bg-darkblue text-light font-medium"
+                          ? "chat-bubble items-end pb-2 bg-brand text-light font-medium"
+                          : "chat-bubble items-end pb-2 bg-darkblue text-light font-medium"
                       }
                     >
                       {messageContent.message}
